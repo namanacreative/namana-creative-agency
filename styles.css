@@ -1381,7 +1381,11 @@ button {
   body::before {
     content: "";
     position: fixed;
-    inset: 0 0 -120px;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: calc(100lvh + 180px);
+    min-height: calc(100dvh + 180px);
     z-index: 21;
     pointer-events: none;
     background: rgba(2, 4, 18, 0.52);
