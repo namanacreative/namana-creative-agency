@@ -11,7 +11,7 @@ const navCtas = document.querySelectorAll(".nav-cta");
 const form = document.querySelector(".contact-form");
 const note = document.querySelector("[data-form-note]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const mobileSceneQuery = window.matchMedia("(max-width: 760px)");
+const mobileSceneQuery = window.matchMedia("(max-width: 980px)");
 
 const updateHeader = () => {
   if (header.classList.contains("is-menu-open")) {
@@ -444,7 +444,7 @@ const normalizeWheelDelta = (event) => {
 
 let limitedScrollTarget = 0;
 let limitedScrollFrame = 0;
-let mobileSceneLocked = false;
+let limitedScrollLocked = false;
 let howWorkTouchStartY = 0;
 let howWorkTouchLastY = 0;
 
@@ -454,15 +454,13 @@ const animateLimitedScroll = () => {
   if (Math.abs(distance) < 1) {
     window.scrollTo(0, limitedScrollTarget);
     limitedScrollFrame = 0;
-    mobileSceneLocked = false;
+    limitedScrollLocked = false;
     return;
   }
 
   window.scrollTo(0, window.scrollY + distance * 0.42);
   limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
 };
-
-const howWorkSceneStops = [0, 0.21, 0.6, 0.9, 0.995];
 
 const getHowWorkMetrics = () => {
   const viewportHeight = window.innerHeight || 1;
@@ -482,37 +480,15 @@ const isInsideHowWork = () => {
   return window.scrollY >= sectionStart && window.scrollY <= sectionEnd;
 };
 
-const nearestHowWorkStopIndex = (progress) => {
-  let nearestIndex = 0;
-  let nearestDistance = Number.POSITIVE_INFINITY;
-
-  howWorkSceneStops.forEach((stop, index) => {
-    const distance = Math.abs(stop - progress);
-    if (distance < nearestDistance) {
-      nearestDistance = distance;
-      nearestIndex = index;
-    }
-  });
-
-  return nearestIndex;
-};
-
-const stepHowWorkScene = (direction) => {
-  if (!howWork || mobileSceneLocked) {
+const stepHowWorkScroll = (direction) => {
+  if (!howWork || limitedScrollLocked) {
     return;
   }
 
-  const { sectionStart, sectionEnd, travel } = getHowWorkMetrics();
-  const progress = clamp((window.scrollY - sectionStart) / travel, 0, 1);
-  const currentIndex = nearestHowWorkStopIndex(progress);
-  const nextIndex = clamp(currentIndex + direction, 0, howWorkSceneStops.length - 1);
-
-  if (nextIndex === currentIndex) {
-    return;
-  }
-
-  mobileSceneLocked = true;
-  limitedScrollTarget = clamp(sectionStart + howWorkSceneStops[nextIndex] * travel, sectionStart, sectionEnd);
+  const { sectionStart, sectionEnd } = getHowWorkMetrics();
+  const stepSize = clamp(window.innerHeight * 0.26, 180, 240);
+  limitedScrollLocked = true;
+  limitedScrollTarget = clamp(window.scrollY + direction * stepSize, sectionStart, sectionEnd);
 
   if (limitedScrollFrame) {
     window.cancelAnimationFrame(limitedScrollFrame);
@@ -549,7 +525,7 @@ const limitHowWorkScroll = (event) => {
 
   if (mobileSceneQuery.matches) {
     event.preventDefault();
-    stepHowWorkScene(rawDelta > 0 ? 1 : -1);
+    stepHowWorkScroll(rawDelta > 0 ? 1 : -1);
     return;
   }
 
@@ -592,11 +568,11 @@ const handleHowWorkTouchEnd = () => {
   }
 
   const delta = howWorkTouchStartY - howWorkTouchLastY;
-  if (Math.abs(delta) < 42) {
+  if (Math.abs(delta) < 34) {
     return;
   }
 
-  stepHowWorkScene(delta > 0 ? 1 : -1);
+  stepHowWorkScroll(delta > 0 ? 1 : -1);
 };
 
 if (howWork) {
