@@ -523,18 +523,40 @@ const nearestHowWorkStopIndex = (progress) => {
   return nearestIndex;
 };
 
-const stepHowWorkScroll = (direction) => {
-  if (!howWork || limitedScrollLocked) {
-    return;
-  }
-
+const getHowWorkStepState = () => {
   const { sectionStart, sectionEnd, travel } = getHowWorkMetrics();
   const progress = clamp((window.scrollY - sectionStart) / travel, 0, 1);
   const currentIndex = nearestHowWorkStopIndex(progress);
+
+  return { sectionStart, sectionEnd, travel, currentIndex };
+};
+
+const escapeHowWorkSection = (direction) => {
+  const { sectionStart, sectionEnd } = getHowWorkMetrics();
+  const viewportHeight = window.innerHeight || 1;
+  limitedScrollLocked = true;
+  limitedScrollTarget =
+    direction < 0
+      ? Math.max(0, sectionStart - viewportHeight * 0.72)
+      : sectionEnd + viewportHeight * 0.72;
+
+  if (limitedScrollFrame) {
+    window.cancelAnimationFrame(limitedScrollFrame);
+  }
+
+  limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
+};
+
+const stepHowWorkScroll = (direction) => {
+  if (!howWork || limitedScrollLocked) {
+    return false;
+  }
+
+  const { sectionStart, sectionEnd, travel, currentIndex } = getHowWorkStepState();
   const nextIndex = clamp(currentIndex + direction, 0, howWorkSceneStops.length - 1);
 
   if (nextIndex === currentIndex) {
-    return;
+    return false;
   }
 
   limitedScrollLocked = true;
@@ -545,6 +567,7 @@ const stepHowWorkScroll = (direction) => {
   }
 
   limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
+  return true;
 };
 
 const limitHowWorkScroll = (event) => {
@@ -575,6 +598,15 @@ const limitHowWorkScroll = (event) => {
 
   if (mobileSceneQuery.matches) {
     if (!isHowWorkSceneCentered()) {
+      return;
+    }
+
+    const { currentIndex } = getHowWorkStepState();
+    const isLeavingSection =
+      (currentIndex === 0 && rawDelta < 0) ||
+      (currentIndex === howWorkSceneStops.length - 1 && rawDelta > 0);
+
+    if (isLeavingSection) {
       return;
     }
 
@@ -635,7 +667,12 @@ const handleHowWorkTouchEnd = () => {
     return;
   }
 
-  stepHowWorkScroll(delta > 0 ? 1 : -1);
+  const direction = delta > 0 ? 1 : -1;
+  const stepped = stepHowWorkScroll(direction);
+
+  if (!stepped) {
+    escapeHowWorkSection(direction);
+  }
 };
 
 if (howWork) {
