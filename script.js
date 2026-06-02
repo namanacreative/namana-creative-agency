@@ -482,15 +482,39 @@ const isInsideHowWork = () => {
   return window.scrollY >= sectionStart && window.scrollY <= sectionEnd;
 };
 
+const howWorkSceneStops = [0, 0.21, 0.6, 0.9, 0.995];
+
+const nearestHowWorkStopIndex = (progress) => {
+  let nearestIndex = 0;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  howWorkSceneStops.forEach((stop, index) => {
+    const distance = Math.abs(stop - progress);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestIndex = index;
+    }
+  });
+
+  return nearestIndex;
+};
+
 const stepHowWorkScroll = (direction) => {
   if (!howWork || limitedScrollLocked) {
     return;
   }
 
-  const { sectionStart, sectionEnd } = getHowWorkMetrics();
-  const stepSize = clamp(window.innerHeight * 0.26, 180, 240);
+  const { sectionStart, sectionEnd, travel } = getHowWorkMetrics();
+  const progress = clamp((window.scrollY - sectionStart) / travel, 0, 1);
+  const currentIndex = nearestHowWorkStopIndex(progress);
+  const nextIndex = clamp(currentIndex + direction, 0, howWorkSceneStops.length - 1);
+
+  if (nextIndex === currentIndex) {
+    return;
+  }
+
   limitedScrollLocked = true;
-  limitedScrollTarget = clamp(window.scrollY + direction * stepSize, sectionStart, sectionEnd);
+  limitedScrollTarget = clamp(sectionStart + howWorkSceneStops[nextIndex] * travel, sectionStart, sectionEnd);
 
   if (limitedScrollFrame) {
     window.cancelAnimationFrame(limitedScrollFrame);
