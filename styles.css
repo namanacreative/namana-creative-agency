@@ -71,7 +71,6 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
-  background: #050505;
 }
 
 html.is-menu-open {
@@ -82,14 +81,10 @@ html.is-menu-open {
 body {
   margin: 0;
   overflow-x: hidden;
-  background: #050505;
+  background: var(--paper);
   color: var(--ink);
   font-family: Urbanist, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   line-height: 1.5;
-}
-
-main {
-  background: var(--paper);
 }
 
 body.is-menu-open {
@@ -811,10 +806,6 @@ button {
     radial-gradient(ellipse at 78% 4%, rgba(159, 244, 212, 0.34), transparent 42%),
     linear-gradient(135deg, #112da2 0%, #1942b0 46%, #0b236e 100%);
   color: #fff;
-}
-
-body.page-about main {
-  background: #050505;
 }
 
 .about-hero-content {
