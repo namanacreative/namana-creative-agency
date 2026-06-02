@@ -87,6 +87,10 @@ body {
   line-height: 1.5;
 }
 
+body.page-about {
+  background: #050505;
+}
+
 body.is-menu-open {
   overflow: hidden;
 }
