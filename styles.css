@@ -71,6 +71,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
+  background: #050505;
 }
 
 html.is-menu-open {
@@ -81,10 +82,14 @@ html.is-menu-open {
 body {
   margin: 0;
   overflow-x: hidden;
-  background: var(--paper);
+  background: #050505;
   color: var(--ink);
   font-family: Urbanist, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   line-height: 1.5;
+}
+
+main {
+  background: var(--paper);
 }
 
 body.is-menu-open {
@@ -818,6 +823,10 @@ button {
   color: #fff;
 }
 
+body.page-about main {
+  background: #050505;
+}
+
 .about-hero-content {
   width: min(980px, 100%);
   text-align: center;
@@ -1271,6 +1280,18 @@ button {
 @media (max-width: 980px) {
   html {
     scroll-padding-top: 78px;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    height: max(34px, env(safe-area-inset-bottom));
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), transparent);
   }
 
   .site-header {
