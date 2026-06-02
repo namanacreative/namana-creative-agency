@@ -1231,6 +1231,10 @@ button {
     scroll-padding-top: 78px;
   }
 
+  .how-work {
+    touch-action: none;
+  }
+
   .site-header {
     grid-template-columns: auto 1fr;
     gap: 16px;

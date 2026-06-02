@@ -575,6 +575,7 @@ const handleHowWorkTouchStart = (event) => {
     return;
   }
 
+  event.preventDefault();
   const touch = event.touches[0];
   howWorkTouchActive = true;
   howWorkTouchStartY = touch.clientY;
@@ -614,7 +615,7 @@ if (howWork) {
   window.addEventListener("scroll", updateHowWork, { passive: true });
   window.addEventListener("resize", updateHowWork);
   window.addEventListener("wheel", limitHowWorkScroll, { passive: false });
-  howWork.addEventListener("touchstart", handleHowWorkTouchStart, { passive: true });
+  howWork.addEventListener("touchstart", handleHowWorkTouchStart, { passive: false });
   howWork.addEventListener("touchmove", handleHowWorkTouchMove, { passive: false });
   howWork.addEventListener("touchend", handleHowWorkTouchEnd);
 }
