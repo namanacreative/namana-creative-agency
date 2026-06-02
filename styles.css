@@ -795,56 +795,30 @@ button {
 
 .about-hero {
   position: relative;
-  min-height: 76vh;
+  min-height: 92vh;
   display: grid;
   place-items: center;
   overflow: hidden;
   isolation: isolate;
   padding: 120px clamp(20px, 6vw, 88px) 80px;
   background:
-    radial-gradient(ellipse at 12% 0%, rgba(252, 61, 157, 0.45), transparent 44%),
-    radial-gradient(ellipse at 78% 4%, rgba(159, 244, 212, 0.34), transparent 42%),
-    linear-gradient(135deg, #112da2 0%, #1942b0 46%, #0b236e 100%);
+    linear-gradient(90deg, rgba(0, 10, 56, 0.34), rgba(0, 15, 70, 0.1)),
+    url("assets/about-hero-background.png") center / cover no-repeat;
   color: #fff;
 }
 
 .about-hero-content {
-  width: min(980px, 100%);
-  text-align: center;
-}
-
-.about-kicker {
-  margin: 0 0 14px;
-  color: #9ff4d4;
-  font-weight: 800;
-  text-transform: uppercase;
+  width: min(920px, 100%);
+  text-align: left;
 }
 
 .about-hero h1 {
   color: #fff;
-  font-size: clamp(2.6rem, 7vw, 6.8rem);
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
   font-weight: 800;
 }
 
-.about-story {
-  display: grid;
-  place-items: center;
-  padding: clamp(64px, 9vw, 120px) clamp(20px, 6vw, 88px);
-  background: #fc3d9d;
-  color: #fff;
-}
-
-.about-story > div {
-  width: min(920px, 100%);
-}
-
-.about-story h2 {
-  color: #fff;
-  font-size: clamp(1.45rem, 2.4vw, 2rem);
-  font-weight: 800;
-}
-
-.about-story p {
+.about-hero p {
   max-width: 800px;
   margin: 12px 0 0;
   color: #fff;
@@ -1155,23 +1129,18 @@ button {
   }
 
   .about-hero-content {
-    width: min(1240px, 100%);
-  }
-
-  .about-hero h1 {
-    font-size: clamp(5.4rem, 6.5vw, 8.4rem);
-  }
-
-  .about-story > div {
     width: min(1120px, 100%);
   }
 
-  .about-story h2,
+  .about-hero h1 {
+    font-size: clamp(2rem, 2.4vw, 3.1rem);
+  }
+
   .about-values span {
     font-size: clamp(1.9rem, 2vw, 2.5rem);
   }
 
-  .about-story p,
+  .about-hero p,
   .about-values p {
     font-size: clamp(1.28rem, 1.35vw, 1.58rem);
   }
@@ -1232,15 +1201,14 @@ button {
   }
 
   .about-hero h1 {
-    font-size: clamp(5rem, 8vw, 7rem);
+    font-size: clamp(1.9rem, 3.6vw, 2.8rem);
   }
 
-  .about-story h2,
   .about-values span {
     font-size: clamp(1.8rem, 2.5vw, 2.3rem);
   }
 
-  .about-story p,
+  .about-hero p,
   .about-values p {
     font-size: clamp(1.18rem, 1.75vw, 1.42rem);
   }
@@ -1301,7 +1269,7 @@ button {
   }
 
   .about-hero h1 {
-    font-size: clamp(3.4rem, 9vw, 5.8rem);
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
   }
 
   .how-work h2 {
@@ -1348,19 +1316,18 @@ button {
   }
 
   .about-hero h1 {
-    font-size: clamp(4.4rem, 9.6vw, 5.9rem);
+    font-size: clamp(1.85rem, 4.4vw, 2.6rem);
   }
 
   .type-title {
     font-size: clamp(2.8rem, 5.8vw, 3.4rem);
   }
 
-  .about-story h2,
   .about-values span {
     font-size: clamp(1.65rem, 3.2vw, 2.15rem);
   }
 
-  .about-story p,
+  .about-hero p,
   .about-values p {
     font-size: clamp(1.12rem, 2.35vw, 1.3rem);
   }
@@ -1607,15 +1574,14 @@ button {
   }
 
   .about-hero h1 {
-    font-size: clamp(3.2rem, 12vw, 5rem);
+    font-size: clamp(1.65rem, 7vw, 2.25rem);
   }
 
-  .about-story h2,
   .about-values span {
     font-size: clamp(1.55rem, 6vw, 2.05rem);
   }
 
-  .about-story p,
+  .about-hero p,
   .about-values p {
     font-size: clamp(1.08rem, 4.4vw, 1.26rem);
   }
@@ -1631,8 +1597,7 @@ button {
   .split-section,
   .services,
   .approach,
-  .contact,
-  .about-story {
+  .contact {
     padding-inline: clamp(18px, 6vw, 28px);
   }
 
