@@ -445,8 +445,10 @@ const normalizeWheelDelta = (event) => {
 let limitedScrollTarget = 0;
 let limitedScrollFrame = 0;
 let limitedScrollLocked = false;
+let howWorkTouchActive = false;
 let howWorkTouchStartY = 0;
 let howWorkTouchLastY = 0;
+let howWorkTouchStartScroll = 0;
 
 const animateLimitedScroll = () => {
   const distance = limitedScrollTarget - window.scrollY;
@@ -545,29 +547,37 @@ const limitHowWorkScroll = (event) => {
 
 const handleHowWorkTouchStart = (event) => {
   if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+    howWorkTouchActive = false;
     return;
   }
 
   const touch = event.touches[0];
+  howWorkTouchActive = true;
   howWorkTouchStartY = touch.clientY;
   howWorkTouchLastY = touch.clientY;
+  howWorkTouchStartScroll = window.scrollY;
 };
 
 const handleHowWorkTouchMove = (event) => {
-  if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+  if (!howWorkTouchActive || !mobileSceneQuery.matches || document.body.classList.contains("is-menu-open")) {
     return;
   }
 
   howWorkTouchLastY = event.touches[0].clientY;
   event.preventDefault();
+  window.scrollTo(0, howWorkTouchStartScroll);
 };
 
 const handleHowWorkTouchEnd = () => {
-  if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+  if (!howWorkTouchActive || !mobileSceneQuery.matches || document.body.classList.contains("is-menu-open")) {
+    howWorkTouchActive = false;
     return;
   }
 
   const delta = howWorkTouchStartY - howWorkTouchLastY;
+  howWorkTouchActive = false;
+  window.scrollTo(0, howWorkTouchStartScroll);
+
   if (Math.abs(delta) < 34) {
     return;
   }
