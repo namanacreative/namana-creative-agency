@@ -461,6 +461,9 @@ let howWorkTouchStartY = 0;
 let howWorkTouchLastY = 0;
 let howWorkTouchStartScroll = 0;
 
+const getMaxScrollY = () =>
+  Math.max(0, document.documentElement.scrollHeight - (window.innerHeight || 1));
+
 const animateLimitedScroll = () => {
   const distance = limitedScrollTarget - window.scrollY;
 
@@ -471,7 +474,17 @@ const animateLimitedScroll = () => {
     return;
   }
 
-  window.scrollTo(0, window.scrollY + distance * 0.42);
+  const currentScroll = window.scrollY;
+  const nextScroll = clamp(currentScroll + distance * 0.42, 0, getMaxScrollY());
+  window.scrollTo(0, nextScroll);
+
+  if (Math.abs(window.scrollY - currentScroll) < 0.5) {
+    limitedScrollTarget = window.scrollY;
+    limitedScrollFrame = 0;
+    limitedScrollLocked = false;
+    return;
+  }
+
   limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
 };
 
@@ -535,10 +548,13 @@ const escapeHowWorkSection = (direction) => {
   const { sectionStart, sectionEnd } = getHowWorkMetrics();
   const viewportHeight = window.innerHeight || 1;
   limitedScrollLocked = true;
-  limitedScrollTarget =
+  limitedScrollTarget = clamp(
     direction < 0
-      ? Math.max(0, sectionStart - viewportHeight * 0.72)
-      : sectionEnd + viewportHeight * 0.72;
+      ? sectionStart - viewportHeight * 0.72
+      : sectionEnd + viewportHeight * 0.72,
+    0,
+    getMaxScrollY()
+  );
 
   if (limitedScrollFrame) {
     window.cancelAnimationFrame(limitedScrollFrame);
