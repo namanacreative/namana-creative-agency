@@ -25,6 +25,16 @@ const updateHeader = () => {
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
+const updateHowWorkCanvas = () => {
+  if (!howWork || !document.body.classList.contains("page-about")) {
+    return;
+  }
+
+  const rect = howWork.getBoundingClientRect();
+  const isActive = rect.top < window.innerHeight && rect.bottom > 0;
+  document.body.classList.toggle("is-how-work-active", isActive);
+};
+
 let menuScrollY = 0;
 
 const lockPageScroll = () => {
@@ -611,9 +621,20 @@ const handleHowWorkTouchEnd = () => {
 };
 
 if (howWork) {
+  updateHowWorkCanvas();
   updateHowWork();
-  window.addEventListener("scroll", updateHowWork, { passive: true });
-  window.addEventListener("resize", updateHowWork);
+  window.addEventListener(
+    "scroll",
+    () => {
+      updateHowWorkCanvas();
+      updateHowWork();
+    },
+    { passive: true }
+  );
+  window.addEventListener("resize", () => {
+    updateHowWorkCanvas();
+    updateHowWork();
+  });
   window.addEventListener("wheel", limitHowWorkScroll, { passive: false });
   howWork.addEventListener("touchstart", handleHowWorkTouchStart, { passive: false });
   howWork.addEventListener("touchmove", handleHowWorkTouchMove, { passive: false });
