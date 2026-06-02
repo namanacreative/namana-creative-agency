@@ -139,8 +139,13 @@ a {
 
 .brand {
   position: relative;
+  flex: 0 0 auto;
   width: 44px;
   height: 52px;
+  line-height: 0;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .brand-logo {
