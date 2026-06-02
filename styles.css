@@ -226,9 +226,7 @@ a {
   --mesh-a: #1942b0;
   --mesh-b: #fc3d9d;
   --mesh-c: #9ff4d4;
-  background:
-    radial-gradient(circle at 50% 46%, rgba(35, 86, 221, 0.24), transparent 42%),
-    linear-gradient(135deg, #112da2 0%, #1942b0 42%, #14349d 70%, #0b236e 100%);
+  background: #1942b0 url("assets/hero-purpose-background.png") center / cover no-repeat;
   transition:
     --pink-x 6200ms ease-in-out,
     --pink-y 6200ms ease-in-out,
@@ -258,30 +256,22 @@ a {
   z-index: -3;
   content: "";
   background:
-    radial-gradient(ellipse 82% 76% at -6% -4%, rgba(252, 61, 157, 0.56) 0%, rgba(252, 61, 157, 0.26) 32%, transparent 64%),
-    radial-gradient(ellipse 72% 46% at 70% -6%, rgba(159, 244, 212, 0.42) 0%, rgba(75, 183, 235, 0.38) 30%, transparent 64%),
-    radial-gradient(ellipse 82% 76% at var(--blue-x) var(--blue-y), rgba(63, 136, 255, 0.52) 0%, transparent 58%),
-    radial-gradient(ellipse 46% 42% at var(--pink-x) var(--pink-y), rgba(252, 61, 157, 0.2) 0%, transparent 62%),
-    radial-gradient(ellipse 34% 30% at var(--green-x) var(--green-y), rgba(159, 244, 212, 0.22) 0%, transparent 64%);
-  filter: blur(18px) saturate(1.24);
-  transform: scale(1.08);
-  animation: meshShift 22s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 50% 52%, rgba(2, 12, 62, 0.08), transparent 48%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.12));
 }
 
 .hero::after {
   z-index: -2;
   content: "";
   background:
-    radial-gradient(ellipse 72% 68% at 50% 56%, rgba(5, 20, 91, 0.18) 0%, rgba(8, 29, 116, 0.06) 48%, transparent 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 22%, rgba(0, 0, 0, 0.12) 100%);
-  opacity: 0.78;
-  filter: blur(14px);
-  animation: softWave 18s ease-in-out infinite alternate;
+    radial-gradient(ellipse 72% 68% at 50% 56%, rgba(5, 20, 91, 0.06) 0%, rgba(8, 29, 116, 0.04) 48%, transparent 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 22%, rgba(0, 0, 0, 0.08) 100%);
+  opacity: 0.55;
 }
 
 .hero-grain {
   z-index: -1;
-  opacity: 0.34;
+  opacity: 0.12;
   mix-blend-mode: overlay;
   background-image:
     radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.16) 0 0.9px, transparent 1px),
