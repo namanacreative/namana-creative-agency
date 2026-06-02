@@ -76,6 +76,7 @@ html {
 html.is-menu-open {
   overflow: hidden;
   scrollbar-gutter: stable;
+  background: #061642;
 }
 
 body {
@@ -93,6 +94,7 @@ body.page-about.is-how-work-active {
 
 body.is-menu-open {
   overflow: hidden;
+  background: #061642;
 }
 
 img {
@@ -1388,7 +1390,8 @@ button {
     min-height: calc(100dvh + 180px);
     z-index: 21;
     pointer-events: none;
-    background: rgba(2, 4, 18, 0.52);
+    background:
+      linear-gradient(to bottom, rgba(2, 4, 18, 0.52) 0%, rgba(2, 4, 18, 0.52) 82%, rgba(6, 22, 66, 0.82) 100%);
     opacity: 0;
     backdrop-filter: blur(0);
     -webkit-backdrop-filter: blur(0);
