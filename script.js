@@ -1,0 +1,505 @@
+const header = document.querySelector("[data-header]");
+const hero = document.querySelector(".hero");
+const typePrefix = document.querySelector("[data-type-prefix]");
+const typeStrong = document.querySelector("[data-type-strong]");
+const typeCaret = document.querySelector("[data-type-caret]");
+const revealItems = document.querySelectorAll(".reveal");
+const howWork = document.querySelector("[data-how-work]");
+const menuToggle = document.querySelector("[data-menu-toggle]");
+const navLinks = document.querySelector("[data-nav-links]");
+const navCtas = document.querySelectorAll(".nav-cta");
+const form = document.querySelector(".contact-form");
+const note = document.querySelector("[data-form-note]");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const updateHeader = () => {
+  if (header.classList.contains("is-menu-open")) {
+    header.classList.add("is-scrolled");
+    return;
+  }
+
+  header.classList.toggle("is-scrolled", window.scrollY > 24);
+};
+
+updateHeader();
+window.addEventListener("scroll", updateHeader, { passive: true });
+
+let menuScrollY = 0;
+
+const lockPageScroll = () => {
+  menuScrollY = window.scrollY;
+};
+
+const unlockPageScroll = () => {
+  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
+  window.scrollTo(0, menuScrollY);
+  document.documentElement.style.scrollBehavior = previousScrollBehavior;
+  updateHeader();
+};
+
+const restoreMenuScroll = () => {
+  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
+  window.scrollTo(0, menuScrollY);
+  document.documentElement.style.scrollBehavior = previousScrollBehavior;
+};
+
+const blockMenuScroll = (event) => {
+  if (!document.body.classList.contains("is-menu-open")) {
+    return;
+  }
+
+  event.preventDefault();
+};
+
+const blockMenuScrollKeys = (event) => {
+  if (!document.body.classList.contains("is-menu-open")) {
+    return;
+  }
+
+  const scrollKeys = [" ", "ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End"];
+  if (scrollKeys.includes(event.key)) {
+    event.preventDefault();
+  }
+};
+
+const setMenuOpen = (isOpen) => {
+  if (!menuToggle || !navLinks) {
+    return;
+  }
+
+  const wasOpen = header.classList.contains("is-menu-open");
+  if (isOpen === wasOpen) {
+    return;
+  }
+
+  if (isOpen) {
+    lockPageScroll();
+    if (howWorkProgressFrame) {
+      window.cancelAnimationFrame(howWorkProgressFrame);
+      howWorkProgressFrame = 0;
+      howWorkTargetProgress = howWorkRenderProgress;
+    }
+    if (limitedScrollFrame) {
+      window.cancelAnimationFrame(limitedScrollFrame);
+      limitedScrollFrame = 0;
+    }
+  }
+
+  header.classList.toggle("is-menu-open", isOpen);
+  document.body.classList.toggle("is-menu-open", isOpen);
+  document.documentElement.classList.toggle("is-menu-open", isOpen);
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+
+  if (isOpen) {
+    header.classList.add("is-scrolled");
+    restoreMenuScroll();
+  } else {
+    unlockPageScroll();
+    updateHowWork();
+  }
+};
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener("click", () => {
+    setMenuOpen(!header.classList.contains("is-menu-open"));
+  });
+
+  navLinks.addEventListener("click", (event) => {
+    if (event.target.closest("a")) {
+      setMenuOpen(false);
+    }
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!header.classList.contains("is-menu-open")) {
+      return;
+    }
+
+    const target = event.target;
+    if (navLinks.contains(target) || menuToggle.contains(target)) {
+      return;
+    }
+
+    setMenuOpen(false);
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setMenuOpen(false);
+    }
+  });
+
+  window.addEventListener("wheel", blockMenuScroll, { passive: false });
+  window.addEventListener("touchmove", blockMenuScroll, { passive: false });
+  window.addEventListener("keydown", blockMenuScrollKeys);
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 760) {
+      setMenuOpen(false);
+    }
+  });
+}
+
+const ctaHoverColors = [
+  { background: "#fc3d9d", color: "#fff", iconFilter: "invert(1)" },
+  { background: "#9ff4d4", color: "#171716", iconFilter: "none" },
+];
+
+navCtas.forEach((cta) => {
+  const applyRandomCtaHover = () => {
+    const color = ctaHoverColors[Math.floor(Math.random() * ctaHoverColors.length)];
+    cta.style.setProperty("--nav-cta-hover-bg", color.background);
+    cta.style.setProperty("--nav-cta-hover-color", color.color);
+    cta.style.setProperty("--nav-cta-hover-icon-filter", color.iconFilter);
+    cta.style.backgroundColor = color.background;
+    cta.style.color = color.color;
+    cta.style.borderColor = color.background;
+    const icon = cta.querySelector("img");
+    if (icon) {
+      icon.style.filter = color.iconFilter;
+    }
+    cta.classList.add("is-random-hover");
+  };
+
+  cta.addEventListener("pointerenter", applyRandomCtaHover);
+  cta.addEventListener("focus", applyRandomCtaHover);
+  cta.addEventListener("pointerleave", () => {
+    cta.classList.remove("is-random-hover");
+    cta.style.backgroundColor = "";
+    cta.style.color = "";
+    cta.style.borderColor = "";
+    const icon = cta.querySelector("img");
+    if (icon) {
+      icon.style.filter = "";
+    }
+  });
+  cta.addEventListener("blur", () => {
+    cta.classList.remove("is-random-hover");
+    cta.style.backgroundColor = "";
+    cta.style.color = "";
+    cta.style.borderColor = "";
+    const icon = cta.querySelector("img");
+    if (icon) {
+      icon.style.filter = "";
+    }
+  });
+});
+
+const randomPercent = (min, max) => `${Math.round(min + Math.random() * (max - min))}%`;
+
+const moveHighlights = () => {
+  hero.style.setProperty("--pink-x", randomPercent(2, 34));
+  hero.style.setProperty("--pink-y", randomPercent(0, 32));
+  hero.style.setProperty("--green-x", randomPercent(48, 88));
+  hero.style.setProperty("--green-y", randomPercent(0, 22));
+  hero.style.setProperty("--blue-x", randomPercent(28, 78));
+  hero.style.setProperty("--blue-y", randomPercent(18, 62));
+};
+
+if (hero) {
+  setInterval(moveHighlights, 8000);
+}
+
+const typeHeroTitle = () => {
+  if (!typePrefix || !typeStrong || !typeCaret) {
+    return;
+  }
+
+  const prefix = "We Post with ";
+  const strong = "Purpose";
+  const full = prefix + strong;
+  let index = 0;
+
+  const tick = () => {
+    const current = full.slice(0, index);
+    typePrefix.textContent = current.slice(0, prefix.length);
+    typeStrong.textContent = current.slice(prefix.length);
+    index += 1;
+
+    if (index <= full.length) {
+      window.setTimeout(tick, index < prefix.length ? 58 : 72);
+    } else {
+      typeCaret.classList.add("is-hidden");
+      typeStrong.classList.add("is-looping");
+    }
+  };
+
+  tick();
+};
+
+typeHeroTitle();
+
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.16 }
+  );
+
+  revealItems.forEach((item) => revealObserver.observe(item));
+} else {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+}
+
+if (form && note) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    note.textContent = "Thanks. Namana will shape a creative reply soon.";
+    form.reset();
+  });
+}
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const progressBetween = (value, start, end) => clamp((value - start) / (end - start), 0, 1);
+const smoothProgress = (value) => value * value * (3 - 2 * value);
+const easeInOutCubic = (value) =>
+  value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
+const visibleCropOffset = (top, right, bottom, left) => {
+  const centerX = (left + (100 - right)) / 2;
+  const centerY = (top + (100 - bottom)) / 2;
+
+  return {
+    x: 50 - centerX,
+    y: 50 - centerY,
+  };
+};
+let howWorkTargetProgress = 0;
+let howWorkRenderProgress = 0;
+let howWorkProgressReady = false;
+let howWorkProgressFrame = 0;
+
+const readHowWorkProgress = () => {
+  if (!howWork || prefersReducedMotion) {
+    return 0;
+  }
+
+  const rect = howWork.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || 1;
+  const travel = Math.max(howWork.offsetHeight - viewportHeight, 1);
+
+  return clamp(-rect.top / travel, 0, 1);
+};
+
+const renderHowWork = (progress) => {
+  const introFade = easeInOutCubic(progressBetween(progress, 0.05, 0.10));
+  const morphProgress = easeInOutCubic(progressBetween(progress, 0.10, 0.16));
+  const empathyFinal = easeInOutCubic(progressBetween(progress, 0.16, 0.18));
+  const empathyReveal = easeInOutCubic(progressBetween(progress, 0.18, 0.21));
+  const empathyOut = easeInOutCubic(progressBetween(progress, 0.27, 0.32));
+  const colorReturn = easeInOutCubic(progressBetween(progress, 0.32, 0.36));
+  const scrollRotateProgress = easeInOutCubic(progressBetween(progress, 0.36, 0.42));
+  const blueRemove = easeInOutCubic(progressBetween(progress, 0.43, 0.49));
+  const cropProgress = easeInOutCubic(progressBetween(progress, 0.47, 0.53));
+  const discussionFinal = easeInOutCubic(progressBetween(progress, 0.53, 0.56));
+  const discussionReveal = easeInOutCubic(progressBetween(progress, 0.56, 0.60));
+  const discussionOut = easeInOutCubic(progressBetween(progress, 0.68, 0.73));
+  const logoRestore = easeInOutCubic(progressBetween(progress, 0.73, 0.78));
+  const creationBlueGone = easeInOutCubic(progressBetween(progress, 0.74, 0.80));
+  const creationShapeCrop = easeInOutCubic(progressBetween(progress, 0.76, 0.82));
+  const creationTurn = easeInOutCubic(progressBetween(progress, 0.78, 0.84));
+  const creationFinal = easeInOutCubic(progressBetween(progress, 0.84, 0.87));
+  const creationReveal = easeInOutCubic(progressBetween(progress, 0.87, 0.90));
+  const creationOut = easeInOutCubic(progressBetween(progress, 0.925, 0.95));
+  const growthReturn = easeInOutCubic(progressBetween(progress, 0.925, 0.95));
+  const growthRemove = easeInOutCubic(progressBetween(progress, 0.95, 0.97));
+  const growthWhite = easeInOutCubic(progressBetween(progress, 0.965, 0.98));
+  const growthReveal = easeInOutCubic(progressBetween(progress, 0.98, 0.995));
+  const empathyWhite = empathyFinal * (1 - empathyOut);
+  const discussionWhite = discussionFinal * (1 - discussionOut);
+  const creationWhite = creationFinal * (1 - creationOut);
+  const logoWhite = Math.max(empathyWhite, discussionWhite, creationWhite, growthWhite);
+  const growthCircle = easeInOutCubic(progressBetween(progress, 0.965, 0.98));
+  const logoCircleOpacity = Math.max(empathyWhite, discussionWhite, creationWhite, growthCircle);
+  const preDiscussionBlue = progress < 0.32 ? 1 - morphProgress : colorReturn;
+  const preDiscussionSage = progress < 0.32 ? 1 - morphProgress : colorReturn;
+  const preDiscussionPink = progress < 0.32 ? 1 - morphProgress * 0.18 : 0.82 + colorReturn * 0.18;
+
+  const rotateProgress = scrollRotateProgress;
+  const restoredLogo = rotateProgress * (1 - logoRestore);
+  const logoRotate = (restoredLogo * 180 - 45 * creationTurn) * (1 - growthReturn);
+  const logoFlip = restoredLogo * 180 * (1 - growthReturn);
+  const logoBlueOpacity =
+    (preDiscussionBlue * (1 - blueRemove) * (1 - logoRestore) + logoRestore * (1 - creationBlueGone)) *
+    (1 - growthRemove);
+  const logoSageOpacity = preDiscussionSage * (1 - logoRestore) + logoRestore;
+  const logoPinkOpacity =
+    (preDiscussionPink * (1 - logoRestore) + logoRestore) * (1 - growthRemove);
+  const finalCrop = cropProgress * (1 - logoRestore) * (1 - growthReturn);
+  const boxTop = 0;
+  const growthCropRight = 0.2;
+  const growthCropBottom = 60.6;
+  const growthCropLeft = 59.6;
+  const boxRight = creationShapeCrop * 12 * (1 - growthReturn) + growthCropRight * growthRemove;
+  const boxBottom = creationShapeCrop * 46 * (1 - growthReturn) + growthCropBottom * growthRemove;
+  const boxLeft = creationShapeCrop * 34 * (1 - growthReturn) + growthCropLeft * growthRemove;
+  const cropLeft = finalCrop * 50 + boxLeft;
+  const cropRight = boxRight;
+  const cropTop = boxTop;
+  const cropBottom = boxBottom;
+  const visibleOffset = visibleCropOffset(cropTop, cropRight, cropBottom, cropLeft);
+  const finalCreationOffset = visibleCropOffset(0, 12, 46, 84);
+  const creationPixelOffsetX = -12.5;
+  const creationPixelOffsetY = 31;
+  const creationRotationCentering = creationShapeCrop * creationTurn * (1 - growthReturn);
+  const logoVisibleX =
+    visibleOffset.x + (creationPixelOffsetX - finalCreationOffset.x) * creationRotationCentering - growthRemove * 29;
+  const logoVisibleY =
+    visibleOffset.y + (creationPixelOffsetY - finalCreationOffset.y) * creationRotationCentering + growthRemove * 29;
+  const empathyScaleCorrection = empathyWhite * 0.14 * (1 - discussionWhite) * (1 - creationWhite) * (1 - growthRemove);
+  const logoScale = 1 - empathyScaleCorrection + creationShapeCrop * 0.32 * (1 - growthReturn) + growthRemove * 0.74;
+
+  howWork.style.setProperty("--work-darkness", progress.toFixed(3));
+  howWork.style.setProperty("--work-intro", introFade.toFixed(3));
+  howWork.style.setProperty("--work-empathy", (empathyReveal * (1 - empathyOut)).toFixed(3));
+  howWork.style.setProperty("--work-shade", (0.14 + progress * 0.68).toFixed(3));
+  howWork.style.setProperty("--work-grain-opacity", (0.34 + progress * 0.2).toFixed(3));
+  howWork.style.setProperty("--work-bottom-vignette", (0.16 + progress * 0.44).toFixed(3));
+  howWork.style.setProperty("--work-bottom-overlay", (0.32 + progress * 0.5).toFixed(3));
+  howWork.style.setProperty("--work-logo-blue-opacity", logoBlueOpacity.toFixed(3));
+  howWork.style.setProperty("--work-logo-sage-opacity", logoSageOpacity.toFixed(3));
+  howWork.style.setProperty("--work-logo-pink-opacity", logoPinkOpacity.toFixed(3));
+  howWork.style.setProperty("--work-logo-white", logoWhite.toFixed(3));
+  howWork.style.setProperty("--work-logo-circle-opacity", logoCircleOpacity.toFixed(3));
+  howWork.style.setProperty("--work-logo-rotate", `${logoRotate.toFixed(1)}deg`);
+  howWork.style.setProperty("--work-logo-flip-y", `${logoFlip.toFixed(1)}deg`);
+  howWork.style.setProperty("--work-logo-center-offset", "0%");
+  howWork.style.setProperty("--work-logo-center-y-offset", "0%");
+  howWork.style.setProperty("--work-logo-visible-x", `${logoVisibleX.toFixed(1)}%`);
+  howWork.style.setProperty("--work-logo-visible-y", `${logoVisibleY.toFixed(1)}%`);
+  howWork.style.setProperty("--work-logo-scale", logoScale.toFixed(3));
+  howWork.style.setProperty("--work-logo-origin-x", "50%");
+  howWork.style.setProperty("--work-logo-origin-y", "50%");
+  howWork.style.setProperty("--work-logo-mask-solid", `${(72 + creationShapeCrop * 28).toFixed(1)}%`);
+  howWork.style.setProperty("--work-logo-crop-top", `${cropTop.toFixed(1)}%`);
+  howWork.style.setProperty("--work-logo-crop-right", `${cropRight.toFixed(1)}%`);
+  howWork.style.setProperty("--work-logo-crop-bottom", `${cropBottom.toFixed(1)}%`);
+  howWork.style.setProperty("--work-logo-crop-left", `${cropLeft.toFixed(1)}%`);
+  howWork.style.setProperty("--work-title-opacity", (1 - introFade).toFixed(3));
+  howWork.style.setProperty("--work-title-y", `${(introFade * -42).toFixed(1)}px`);
+  howWork.style.setProperty("--work-step-opacity", (empathyReveal * (1 - empathyOut)).toFixed(3));
+  howWork.style.setProperty("--work-step-y", `${((1 - empathyReveal) * 32 - empathyOut * 22).toFixed(1)}px`);
+  howWork.style.setProperty("--work-discussion-opacity", (discussionReveal * (1 - discussionOut)).toFixed(3));
+  howWork.style.setProperty("--work-discussion-y", `${((1 - discussionReveal) * 32).toFixed(1)}px`);
+  howWork.style.setProperty("--work-creation-opacity", (creationReveal * (1 - creationOut)).toFixed(3));
+  howWork.style.setProperty("--work-creation-y", `${((1 - creationReveal) * 32 - creationOut * 22).toFixed(1)}px`);
+  howWork.style.setProperty("--work-growth-opacity", growthReveal.toFixed(3));
+  howWork.style.setProperty("--work-growth-y", `${((1 - growthReveal) * 32).toFixed(1)}px`);
+};
+
+const animateHowWorkProgress = () => {
+  const distance = howWorkTargetProgress - howWorkRenderProgress;
+
+  if (Math.abs(distance) < 0.001) {
+    howWorkRenderProgress = howWorkTargetProgress;
+    renderHowWork(howWorkRenderProgress);
+    howWorkProgressFrame = 0;
+    return;
+  }
+
+  howWorkRenderProgress += distance * 0.24;
+  renderHowWork(howWorkRenderProgress);
+  howWorkProgressFrame = window.requestAnimationFrame(animateHowWorkProgress);
+};
+
+const updateHowWork = () => {
+  if (!howWork || prefersReducedMotion || document.body.classList.contains("is-menu-open")) {
+    return;
+  }
+
+  howWorkTargetProgress = readHowWorkProgress();
+
+  if (!howWorkProgressReady) {
+    howWorkRenderProgress = howWorkTargetProgress;
+    howWorkProgressReady = true;
+    renderHowWork(howWorkRenderProgress);
+    return;
+  }
+
+  if (!howWorkProgressFrame) {
+    howWorkProgressFrame = window.requestAnimationFrame(animateHowWorkProgress);
+  }
+};
+
+const normalizeWheelDelta = (event) => {
+  if (event.deltaMode === 1) {
+    return event.deltaY * 16;
+  }
+
+  if (event.deltaMode === 2) {
+    return event.deltaY * window.innerHeight;
+  }
+
+  return event.deltaY;
+};
+
+let limitedScrollTarget = 0;
+let limitedScrollFrame = 0;
+
+const animateLimitedScroll = () => {
+  const distance = limitedScrollTarget - window.scrollY;
+
+  if (Math.abs(distance) < 1) {
+    window.scrollTo(0, limitedScrollTarget);
+    limitedScrollFrame = 0;
+    return;
+  }
+
+  window.scrollTo(0, window.scrollY + distance * 0.42);
+  limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
+};
+
+const limitHowWorkScroll = (event) => {
+  if (
+    !howWork ||
+    prefersReducedMotion ||
+    document.body.classList.contains("is-menu-open") ||
+    event.ctrlKey ||
+    event.deltaY === 0
+  ) {
+    return;
+  }
+
+  const viewportHeight = window.innerHeight || 1;
+  const sectionStart = howWork.offsetTop;
+  const sectionEnd = howWork.offsetTop + howWork.offsetHeight - viewportHeight;
+  const currentScroll = window.scrollY;
+  const rawDelta = normalizeWheelDelta(event);
+  const nextScroll = currentScroll + rawDelta;
+  const insideSection = currentScroll >= sectionStart && currentScroll <= sectionEnd;
+  const enteringSection =
+    (currentScroll < sectionStart && nextScroll > sectionStart) ||
+    (currentScroll > sectionEnd && nextScroll < sectionEnd);
+
+  if (!insideSection && !enteringSection) {
+    return;
+  }
+
+  if ((currentScroll <= sectionStart && rawDelta < 0) || (currentScroll >= sectionEnd && rawDelta > 0)) {
+    return;
+  }
+
+  event.preventDefault();
+  const maxStep = 220;
+  const limitedDelta = Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), maxStep);
+  limitedScrollTarget = clamp(currentScroll + limitedDelta, sectionStart, sectionEnd);
+
+  if (!limitedScrollFrame) {
+    limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
+  }
+};
+
+if (howWork) {
+  updateHowWork();
+  window.addEventListener("scroll", updateHowWork, { passive: true });
+  window.addEventListener("resize", updateHowWork);
+  window.addEventListener("wheel", limitHowWorkScroll, { passive: false });
+}
