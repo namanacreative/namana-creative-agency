@@ -5,6 +5,7 @@ const typeStrong = document.querySelector("[data-type-strong]");
 const typeCaret = document.querySelector("[data-type-caret]");
 const revealItems = document.querySelectorAll(".reveal");
 const howWork = document.querySelector("[data-how-work]");
+const howWorkScene = document.querySelector(".how-work-scene");
 const menuToggle = document.querySelector("[data-menu-toggle]");
 const navLinks = document.querySelector("[data-nav-links]");
 const navCtas = document.querySelectorAll(".nav-cta");
@@ -492,6 +493,19 @@ const isInsideHowWork = () => {
   return window.scrollY >= sectionStart && window.scrollY <= sectionEnd;
 };
 
+const isHowWorkSceneCentered = () => {
+  if (!howWorkScene || !isInsideHowWork()) {
+    return false;
+  }
+
+  const rect = howWorkScene.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || 1;
+  const sceneCenter = rect.top + rect.height / 2;
+  const centerTolerance = Math.min(96, viewportHeight * 0.14);
+
+  return rect.top <= 6 && Math.abs(sceneCenter - viewportHeight / 2) <= centerTolerance;
+};
+
 const howWorkSceneStops = [0, 0.21, 0.6, 0.9, 0.995];
 
 const nearestHowWorkStopIndex = (progress) => {
@@ -560,6 +574,10 @@ const limitHowWorkScroll = (event) => {
   }
 
   if (mobileSceneQuery.matches) {
+    if (!isHowWorkSceneCentered()) {
+      return;
+    }
+
     event.preventDefault();
     stepHowWorkScroll(rawDelta > 0 ? 1 : -1);
     return;
@@ -580,7 +598,7 @@ const limitHowWorkScroll = (event) => {
 };
 
 const handleHowWorkTouchStart = (event) => {
-  if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+  if (!mobileSceneQuery.matches || !isHowWorkSceneCentered() || document.body.classList.contains("is-menu-open")) {
     howWorkTouchActive = false;
     return;
   }

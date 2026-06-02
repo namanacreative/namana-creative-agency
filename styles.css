@@ -1249,7 +1249,7 @@ button {
   }
 
   .how-work {
-    touch-action: none;
+    touch-action: pan-y;
   }
 
   .site-header {
