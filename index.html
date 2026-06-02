@@ -159,18 +159,25 @@
           <p class="section-kicker">Contact</p>
           <h2>Bring Namana into your next campaign, launch, or rebrand.</h2>
         </div>
-        <form class="contact-form" aria-label="Contact form">
+        <form
+          class="contact-form"
+          action="https://formsubmit.co/ajax/namanacreative@gmail.com"
+          method="POST"
+          aria-label="Contact form"
+        >
+          <input type="hidden" name="_subject" value="New project inquiry from Namana website">
+          <input type="hidden" name="_captcha" value="false">
           <label>
             <span>Name</span>
-            <input type="text" name="name" autocomplete="name" placeholder="Your name">
+            <input type="text" name="name" autocomplete="name" placeholder="Your name" required>
           </label>
           <label>
             <span>Email</span>
-            <input type="email" name="email" autocomplete="email" placeholder="you@example.com">
+            <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
           </label>
           <label>
             <span>Message</span>
-            <textarea name="message" rows="4" placeholder="Tell us what you want to create"></textarea>
+            <textarea name="message" rows="4" placeholder="Tell us what you want to create" required></textarea>
           </label>
           <button type="submit">Send message</button>
           <p class="form-note" data-form-note></p>

@@ -736,23 +736,34 @@ h3 {
   display: grid;
   grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1fr);
   gap: clamp(32px, 7vw, 96px);
-  background: #dfe7e4;
+  background:
+    linear-gradient(rgba(4, 15, 58, 0.16), rgba(4, 15, 58, 0.24)),
+    url("assets/contact-background.png") center / cover no-repeat;
+  color: #fff;
+}
+
+.contact .section-kicker,
+.contact h2,
+.contact h2 + p {
+  color: #fff;
 }
 
 .contact-form {
   display: grid;
   gap: 16px;
   padding: clamp(22px, 4vw, 38px);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  box-shadow: var(--shadow);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 28px;
+  box-shadow: 0 28px 80px rgba(0, 8, 44, 0.22);
+  backdrop-filter: blur(22px) saturate(1.25);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
 }
 
 label {
   display: grid;
   gap: 7px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.88);
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -760,12 +771,32 @@ label {
 input,
 textarea {
   width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
   padding: 13px 14px;
-  background: #fff;
-  color: var(--ink);
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
   font: inherit;
+  outline: none;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+textarea {
+  border-radius: 24px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+input:focus,
+textarea:focus {
+  border-color: #9ff4d4;
+  background: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 0 0 4px rgba(159, 244, 212, 0.16);
 }
 
 textarea {
@@ -783,10 +814,29 @@ button {
   cursor: pointer;
 }
 
+.contact-form button {
+  background: #9ff4d4;
+  color: #061642;
+  transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.contact-form button:hover {
+  background: #fc3d9d;
+  color: #fff;
+  box-shadow: 0 18px 38px rgba(252, 61, 157, 0.26);
+  transform: translateY(-1px);
+}
+
+.contact-form button:disabled {
+  cursor: progress;
+  opacity: 0.72;
+  transform: none;
+}
+
 .form-note {
   min-height: 24px;
   margin: 0;
-  color: var(--teal);
+  color: #fff;
   font-weight: 700;
 }
 

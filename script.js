@@ -263,10 +263,44 @@ if ("IntersectionObserver" in window) {
 }
 
 if (form && note) {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    note.textContent = "Thanks. Namana will shape a creative reply soon.";
-    form.reset();
+
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const defaultButtonText = submitButton ? submitButton.textContent : "";
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+    }
+
+    note.textContent = "";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      note.textContent = "Thanks for reaching out. We'll review your project and get back to you shortly.";
+      form.reset();
+    } catch (error) {
+      note.textContent = "Sorry, the message could not be sent. Please email namanacreative@gmail.com directly.";
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = defaultButtonText;
+      }
+    }
   });
 }
 
