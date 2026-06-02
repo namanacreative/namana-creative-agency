@@ -816,7 +816,19 @@ button {
   color: #fff;
 }
 
+.about-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 0;
+  height: min(34vh, 340px);
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(5, 5, 5, 0), #050505 92%);
+}
+
 .about-hero-content {
+  position: relative;
+  z-index: 1;
   width: min(920px, 100%);
   text-align: left;
 }
@@ -910,12 +922,7 @@ button {
   min-height: 720vh;
   overflow: clip;
   isolation: isolate;
-  background:
-    linear-gradient(rgba(0, 4, 24, var(--work-shade)), rgba(0, 4, 24, var(--work-shade))),
-    radial-gradient(ellipse at 16% 12%, rgba(252, 61, 157, 0.48), transparent 36%),
-    radial-gradient(ellipse at 82% 8%, rgba(159, 244, 212, 0.34), transparent 34%),
-    radial-gradient(ellipse at 58% 58%, rgba(31, 96, 255, 0.52), transparent 46%),
-    linear-gradient(145deg, #071856 0%, #12389f 48%, #02071d 100%);
+  background: #050505;
   color: #fff;
 }
 
@@ -929,7 +936,8 @@ button {
 
 .how-work::before {
   z-index: -1;
-  opacity: var(--work-grain-opacity);
+  display: none;
+  opacity: 0;
   mix-blend-mode: overlay;
   background-image:
     radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.18) 0 0.8px, transparent 1px),
