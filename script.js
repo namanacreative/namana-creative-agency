@@ -11,6 +11,7 @@ const navCtas = document.querySelectorAll(".nav-cta");
 const form = document.querySelector(".contact-form");
 const note = document.querySelector("[data-form-note]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mobileSceneQuery = window.matchMedia("(max-width: 760px)");
 
 const updateHeader = () => {
   if (header.classList.contains("is-menu-open")) {
@@ -443,6 +444,9 @@ const normalizeWheelDelta = (event) => {
 
 let limitedScrollTarget = 0;
 let limitedScrollFrame = 0;
+let mobileSceneLocked = false;
+let howWorkTouchStartY = 0;
+let howWorkTouchLastY = 0;
 
 const animateLimitedScroll = () => {
   const distance = limitedScrollTarget - window.scrollY;
@@ -450,10 +454,70 @@ const animateLimitedScroll = () => {
   if (Math.abs(distance) < 1) {
     window.scrollTo(0, limitedScrollTarget);
     limitedScrollFrame = 0;
+    mobileSceneLocked = false;
     return;
   }
 
   window.scrollTo(0, window.scrollY + distance * 0.42);
+  limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
+};
+
+const howWorkSceneStops = [0, 0.21, 0.6, 0.9, 0.995];
+
+const getHowWorkMetrics = () => {
+  const viewportHeight = window.innerHeight || 1;
+  const sectionStart = howWork.offsetTop;
+  const sectionEnd = howWork.offsetTop + howWork.offsetHeight - viewportHeight;
+  const travel = Math.max(howWork.offsetHeight - viewportHeight, 1);
+
+  return { sectionStart, sectionEnd, travel };
+};
+
+const isInsideHowWork = () => {
+  if (!howWork) {
+    return false;
+  }
+
+  const { sectionStart, sectionEnd } = getHowWorkMetrics();
+  return window.scrollY >= sectionStart && window.scrollY <= sectionEnd;
+};
+
+const nearestHowWorkStopIndex = (progress) => {
+  let nearestIndex = 0;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  howWorkSceneStops.forEach((stop, index) => {
+    const distance = Math.abs(stop - progress);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestIndex = index;
+    }
+  });
+
+  return nearestIndex;
+};
+
+const stepHowWorkScene = (direction) => {
+  if (!howWork || mobileSceneLocked) {
+    return;
+  }
+
+  const { sectionStart, sectionEnd, travel } = getHowWorkMetrics();
+  const progress = clamp((window.scrollY - sectionStart) / travel, 0, 1);
+  const currentIndex = nearestHowWorkStopIndex(progress);
+  const nextIndex = clamp(currentIndex + direction, 0, howWorkSceneStops.length - 1);
+
+  if (nextIndex === currentIndex) {
+    return;
+  }
+
+  mobileSceneLocked = true;
+  limitedScrollTarget = clamp(sectionStart + howWorkSceneStops[nextIndex] * travel, sectionStart, sectionEnd);
+
+  if (limitedScrollFrame) {
+    window.cancelAnimationFrame(limitedScrollFrame);
+  }
+
   limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
 };
 
@@ -483,6 +547,12 @@ const limitHowWorkScroll = (event) => {
     return;
   }
 
+  if (mobileSceneQuery.matches) {
+    event.preventDefault();
+    stepHowWorkScene(rawDelta > 0 ? 1 : -1);
+    return;
+  }
+
   if ((currentScroll <= sectionStart && rawDelta < 0) || (currentScroll >= sectionEnd && rawDelta > 0)) {
     return;
   }
@@ -497,9 +567,44 @@ const limitHowWorkScroll = (event) => {
   }
 };
 
+const handleHowWorkTouchStart = (event) => {
+  if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+    return;
+  }
+
+  const touch = event.touches[0];
+  howWorkTouchStartY = touch.clientY;
+  howWorkTouchLastY = touch.clientY;
+};
+
+const handleHowWorkTouchMove = (event) => {
+  if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+    return;
+  }
+
+  howWorkTouchLastY = event.touches[0].clientY;
+  event.preventDefault();
+};
+
+const handleHowWorkTouchEnd = () => {
+  if (!mobileSceneQuery.matches || !isInsideHowWork() || document.body.classList.contains("is-menu-open")) {
+    return;
+  }
+
+  const delta = howWorkTouchStartY - howWorkTouchLastY;
+  if (Math.abs(delta) < 42) {
+    return;
+  }
+
+  stepHowWorkScene(delta > 0 ? 1 : -1);
+};
+
 if (howWork) {
   updateHowWork();
   window.addEventListener("scroll", updateHowWork, { passive: true });
   window.addEventListener("resize", updateHowWork);
   window.addEventListener("wheel", limitHowWorkScroll, { passive: false });
+  howWork.addEventListener("touchstart", handleHowWorkTouchStart, { passive: true });
+  howWork.addEventListener("touchmove", handleHowWorkTouchMove, { passive: false });
+  howWork.addEventListener("touchend", handleHowWorkTouchEnd);
 }
