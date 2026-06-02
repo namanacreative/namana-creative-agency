@@ -1381,11 +1381,7 @@ button {
   body::before {
     content: "";
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: calc(-1 * max(env(safe-area-inset-bottom), 28px));
-    left: 0;
-    min-height: calc(100dvh + max(env(safe-area-inset-bottom), 28px));
+    inset: 0;
     z-index: 21;
     pointer-events: none;
     background: rgba(2, 4, 18, 0.52);
@@ -1405,17 +1401,15 @@ button {
     position: fixed;
     top: 16px;
     right: 14px;
-    bottom: calc(16px + env(safe-area-inset-bottom));
     z-index: 32;
     width: min(320px, calc(100vw - 28px));
-    min-height: auto;
-    max-height: calc(100dvh - 32px - env(safe-area-inset-bottom));
+    min-height: calc(100svh - 32px);
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
     gap: 10px;
-    padding: 96px 18px max(18px, env(safe-area-inset-bottom));
+    padding: 96px 18px 18px;
     color: var(--ink);
     background:
       radial-gradient(circle at 82% 8%, rgba(159, 244, 212, 0.62), transparent 34%),
