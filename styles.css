@@ -1279,9 +1279,9 @@ body.page-about main {
     bottom: 0;
     left: 0;
     z-index: 5;
-    height: max(34px, env(safe-area-inset-bottom));
+    height: max(22px, env(safe-area-inset-bottom));
     pointer-events: none;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), transparent);
+    background: #050505;
   }
 
   .site-header {
