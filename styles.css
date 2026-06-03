@@ -736,6 +736,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1fr);
   gap: clamp(32px, 7vw, 96px);
+  align-items: center;
   background:
     linear-gradient(rgba(4, 15, 58, 0.16), rgba(4, 15, 58, 0.24)),
     url("assets/contact-background.png") center / cover no-repeat;
