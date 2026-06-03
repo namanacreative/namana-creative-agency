@@ -509,7 +509,7 @@ const animateLimitedScroll = () => {
   }
 
   const currentScroll = window.scrollY;
-  const nextScroll = clamp(currentScroll + distance * 0.42, 0, getMaxScrollY());
+  const nextScroll = clamp(currentScroll + distance * 0.2, 0, getMaxScrollY());
   window.scrollTo(0, nextScroll);
 
   if (Math.abs(window.scrollY - currentScroll) < 0.5) {
