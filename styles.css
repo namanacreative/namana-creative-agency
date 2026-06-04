@@ -857,7 +857,7 @@ button {
 
 .about-hero {
   position: relative;
-  min-height: 92vh;
+  min-height: 100vh;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -1195,7 +1195,7 @@ button {
   }
 
   .about-hero {
-    min-height: 84vh;
+    min-height: 100vh;
   }
 
   .about-hero-content {
