@@ -845,7 +845,7 @@ button {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding: 28px clamp(20px, 6vw, 88px);
+  padding: 16px clamp(20px, 6vw, 88px);
   background: var(--ink);
   color: rgba(255, 255, 255, 0.72);
 }
