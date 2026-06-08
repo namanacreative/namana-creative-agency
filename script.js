@@ -493,7 +493,9 @@ let limitedScrollLocked = false;
 let howWorkTouchActive = false;
 let howWorkTouchStartY = 0;
 let howWorkTouchLastY = 0;
-let howWorkTouchStartScroll = 0;
+let howWorkTouchStartProgress = 0;
+let howWorkTouchStartIndex = 0;
+let howWorkTouchHandled = false;
 
 const getMaxScrollY = () =>
   Math.max(0, document.documentElement.scrollHeight - (window.innerHeight || 1));
@@ -620,6 +622,18 @@ const stepHowWorkScroll = (direction) => {
   return true;
 };
 
+const snapHowWorkToProgress = (progress) => {
+  const { sectionStart, sectionEnd, travel } = getHowWorkMetrics();
+  limitedScrollLocked = true;
+  limitedScrollTarget = clamp(sectionStart + progress * travel, sectionStart, sectionEnd);
+
+  if (limitedScrollFrame) {
+    window.cancelAnimationFrame(limitedScrollFrame);
+  }
+
+  limitedScrollFrame = window.requestAnimationFrame(animateLimitedScroll);
+};
+
 const limitHowWorkScroll = (event) => {
   if (
     !howWork ||
@@ -685,12 +699,20 @@ const handleHowWorkTouchStart = (event) => {
     return;
   }
 
-  event.preventDefault();
   const touch = event.touches[0];
+  const { sectionStart, travel, currentIndex } = getHowWorkStepState();
   howWorkTouchActive = true;
+  howWorkTouchHandled = false;
   howWorkTouchStartY = touch.clientY;
   howWorkTouchLastY = touch.clientY;
-  howWorkTouchStartScroll = window.scrollY;
+  howWorkTouchStartProgress = clamp((window.scrollY - sectionStart) / travel, 0, 1);
+  howWorkTouchStartIndex = currentIndex;
+
+  if (limitedScrollFrame) {
+    window.cancelAnimationFrame(limitedScrollFrame);
+    limitedScrollFrame = 0;
+    limitedScrollLocked = false;
+  }
 };
 
 const handleHowWorkTouchMove = (event) => {
@@ -698,9 +720,37 @@ const handleHowWorkTouchMove = (event) => {
     return;
   }
 
-  howWorkTouchLastY = event.touches[0].clientY;
+  const touch = event.touches[0];
+  const delta = howWorkTouchStartY - touch.clientY;
+  const direction = delta > 0 ? 1 : -1;
+  const atFirstScene = howWorkTouchStartIndex === 0;
+  const atLastScene = howWorkTouchStartIndex === howWorkSceneStops.length - 1;
+
+  howWorkTouchLastY = touch.clientY;
+
+  if (Math.abs(delta) < 6) {
+    return;
+  }
+
+  if ((atFirstScene && direction < 0) || (atLastScene && direction > 0)) {
+    howWorkTouchActive = false;
+    return;
+  }
+
   event.preventDefault();
-  window.scrollTo(0, howWorkTouchStartScroll);
+  howWorkTouchHandled = true;
+
+  const { sectionStart, sectionEnd, travel } = getHowWorkMetrics();
+  const targetIndex = clamp(howWorkTouchStartIndex + direction, 0, howWorkSceneStops.length - 1);
+  const fromProgress = howWorkSceneStops[howWorkTouchStartIndex];
+  const toProgress = howWorkSceneStops[targetIndex];
+  const viewportHeight = window.innerHeight || 1;
+  const dragAmount = clamp(Math.abs(delta) / (viewportHeight * 0.78), 0, 1);
+  const easedDrag = smoothProgress(dragAmount);
+  const dragProgress = fromProgress + (toProgress - fromProgress) * easedDrag;
+  const dragScroll = clamp(sectionStart + dragProgress * travel, sectionStart, sectionEnd);
+
+  window.scrollTo(0, dragScroll);
 };
 
 const handleHowWorkTouchEnd = () => {
@@ -710,19 +760,25 @@ const handleHowWorkTouchEnd = () => {
   }
 
   const delta = howWorkTouchStartY - howWorkTouchLastY;
+  const direction = delta > 0 ? 1 : -1;
+  const targetIndex = clamp(howWorkTouchStartIndex + direction, 0, howWorkSceneStops.length - 1);
+  const targetProgress = howWorkSceneStops[targetIndex];
+  const startProgress = howWorkSceneStops[howWorkTouchStartIndex];
+  const viewportHeight = window.innerHeight || 1;
+  const dragAmount = clamp(Math.abs(delta) / (viewportHeight * 0.78), 0, 1);
   howWorkTouchActive = false;
-  window.scrollTo(0, howWorkTouchStartScroll);
 
-  if (Math.abs(delta) < 34) {
+  if (!howWorkTouchHandled || Math.abs(delta) < 34) {
+    snapHowWorkToProgress(howWorkTouchStartProgress);
     return;
   }
 
-  const direction = delta > 0 ? 1 : -1;
-  const stepped = stepHowWorkScroll(direction);
-
-  if (!stepped) {
+  if (targetIndex === howWorkTouchStartIndex) {
     escapeHowWorkSection(direction);
+    return;
   }
+
+  snapHowWorkToProgress(dragAmount > 0.24 ? targetProgress : startProgress);
 };
 
 if (howWork) {
