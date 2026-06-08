@@ -681,6 +681,105 @@ h2 {
   color: var(--muted);
 }
 
+.project-folders {
+  position: relative;
+  min-height: clamp(560px, 82vh, 860px);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: clamp(44px, 7vw, 92px) clamp(18px, 5vw, 72px);
+  background:
+    linear-gradient(rgba(8, 27, 118, 0.1), rgba(8, 27, 118, 0.1)),
+    url("assets/belief-folders-background.png") center / cover no-repeat;
+  isolation: isolate;
+}
+
+.folder-stack {
+  position: relative;
+  width: min(1180px, 96vw);
+  height: clamp(430px, 58vw, 640px);
+}
+
+.folder-card {
+  position: absolute;
+  display: block;
+  width: clamp(310px, 39vw, 560px);
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 26px 32px rgba(0, 11, 60, 0.2));
+  transform: translate3d(var(--folder-x), var(--folder-y), 0) rotate(var(--folder-r)) scale(var(--folder-s));
+  transform-origin: 50% 82%;
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1), filter 260ms ease, z-index 0s linear 160ms;
+  will-change: transform;
+}
+
+.folder-card img {
+  width: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.folder-card:hover,
+.folder-card:focus-visible {
+  z-index: 8;
+  filter: drop-shadow(0 34px 42px rgba(0, 11, 60, 0.3)) saturate(1.08);
+  transform:
+    translate3d(calc(var(--folder-x) + var(--folder-hover-x)), calc(var(--folder-y) - 22px), 0)
+    rotate(calc(var(--folder-r) + var(--folder-hover-r)))
+    scale(calc(var(--folder-s) + 0.035));
+  transition-delay: 0s;
+}
+
+.folder-card:focus-visible {
+  outline: 2px solid #9ff4d4;
+  outline-offset: 10px;
+}
+
+.folder-card-compro {
+  --folder-x: 12%;
+  --folder-y: 0%;
+  --folder-r: -3deg;
+  --folder-s: 0.92;
+  --folder-hover-x: -12px;
+  --folder-hover-r: -2deg;
+  z-index: 2;
+}
+
+.folder-card-branding {
+  --folder-x: 44%;
+  --folder-y: 6%;
+  --folder-r: 2.5deg;
+  --folder-s: 0.92;
+  --folder-hover-x: 14px;
+  --folder-hover-r: 2deg;
+  z-index: 3;
+}
+
+.folder-card-photography {
+  --folder-x: 0%;
+  --folder-y: 24%;
+  --folder-r: -1.5deg;
+  --folder-s: 0.93;
+  --folder-hover-x: -16px;
+  --folder-hover-r: -1.8deg;
+  z-index: 4;
+}
+
+.folder-card-social {
+  --folder-x: 30%;
+  --folder-y: 33%;
+  --folder-r: 1deg;
+  --folder-s: 1;
+  --folder-hover-x: 8px;
+  --folder-hover-r: 1.5deg;
+  z-index: 5;
+}
+
 .services {
   background: var(--ink);
   color: #fff;
@@ -1301,6 +1400,40 @@ button {
     scroll-padding-top: 78px;
   }
 
+  .project-folders {
+    min-height: clamp(520px, 76vh, 760px);
+    padding-inline: 14px;
+  }
+
+  .folder-stack {
+    width: min(760px, 100vw);
+    height: clamp(400px, 80vw, 560px);
+  }
+
+  .folder-card {
+    width: clamp(280px, 52vw, 430px);
+  }
+
+  .folder-card-compro {
+    --folder-x: 13%;
+    --folder-y: 0%;
+  }
+
+  .folder-card-branding {
+    --folder-x: 44%;
+    --folder-y: 8%;
+  }
+
+  .folder-card-photography {
+    --folder-x: 2%;
+    --folder-y: 28%;
+  }
+
+  .folder-card-social {
+    --folder-x: 29%;
+    --folder-y: 36%;
+  }
+
   .how-work {
     touch-action: pan-y;
   }
@@ -1422,6 +1555,43 @@ button {
 @media (max-width: 760px) {
   html {
     scroll-padding-top: 68px;
+  }
+
+  .project-folders {
+    min-height: clamp(520px, 86vh, 680px);
+  }
+
+  .folder-stack {
+    width: min(440px, 100vw);
+    height: clamp(440px, 112vw, 560px);
+  }
+
+  .folder-card {
+    width: clamp(250px, 78vw, 360px);
+  }
+
+  .folder-card-compro {
+    --folder-x: 14%;
+    --folder-y: 0%;
+    --folder-s: 0.76;
+  }
+
+  .folder-card-branding {
+    --folder-x: 31%;
+    --folder-y: 12%;
+    --folder-s: 0.78;
+  }
+
+  .folder-card-photography {
+    --folder-x: 1%;
+    --folder-y: 28%;
+    --folder-s: 0.82;
+  }
+
+  .folder-card-social {
+    --folder-x: 16%;
+    --folder-y: 44%;
+    --folder-s: 0.9;
   }
 
   .site-header {
@@ -1754,6 +1924,30 @@ button {
 @media (max-width: 420px) {
   .site-header {
     padding-inline: 14px;
+  }
+
+  .project-folders {
+    min-height: 560px;
+  }
+
+  .folder-stack {
+    height: 480px;
+  }
+
+  .folder-card {
+    width: 300px;
+  }
+
+  .folder-card-compro {
+    --folder-x: 10%;
+  }
+
+  .folder-card-branding {
+    --folder-x: 25%;
+  }
+
+  .folder-card-social {
+    --folder-x: 11%;
   }
 
   .brand {
