@@ -726,7 +726,6 @@ h2 {
 
 .folder-card:hover,
 .folder-card:focus-visible {
-  z-index: 8;
   filter: drop-shadow(0 34px 42px rgba(0, 11, 60, 0.3)) saturate(1.08);
   transform:
     translate3d(calc(var(--folder-x) + var(--folder-hover-x)), calc(var(--folder-y) - 22px), 0)
