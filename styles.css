@@ -702,6 +702,7 @@ h2 {
 
 .folder-card {
   position: absolute;
+  left: 50%;
   display: block;
   width: clamp(310px, 39vw, 560px);
   min-height: 0;
@@ -711,7 +712,7 @@ h2 {
   background: transparent;
   cursor: pointer;
   filter: drop-shadow(0 26px 32px rgba(0, 11, 60, 0.2));
-  transform: translate3d(var(--folder-x), var(--folder-y), 0) rotate(var(--folder-r)) scale(var(--folder-s));
+  transform: translate3d(calc(-50% + var(--folder-x)), var(--folder-y), 0) rotate(var(--folder-r)) scale(var(--folder-s));
   transform-origin: 50% 82%;
   transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1), filter 260ms ease, z-index 0s linear 160ms;
   will-change: transform;
@@ -728,7 +729,7 @@ h2 {
 .folder-card:focus-visible {
   filter: drop-shadow(0 34px 42px rgba(0, 11, 60, 0.3)) saturate(1.08);
   transform:
-    translate3d(calc(var(--folder-x) + var(--folder-hover-x)), calc(var(--folder-y) - 22px), 0)
+    translate3d(calc(-50% + var(--folder-x) + var(--folder-hover-x)), calc(var(--folder-y) - 22px), 0)
     rotate(calc(var(--folder-r) + var(--folder-hover-r)))
     scale(calc(var(--folder-s) + 0.035));
   transition-delay: 0s;
@@ -740,7 +741,7 @@ h2 {
 }
 
 .folder-card-compro {
-  --folder-x: 20%;
+  --folder-x: clamp(-84px, -5vw, -56px);
   --folder-y: 0%;
   --folder-r: -3deg;
   --folder-s: 0.92;
@@ -750,7 +751,7 @@ h2 {
 }
 
 .folder-card-branding {
-  --folder-x: 52%;
+  --folder-x: clamp(180px, 14vw, 250px);
   --folder-y: 6%;
   --folder-r: 2.5deg;
   --folder-s: 0.92;
@@ -760,7 +761,7 @@ h2 {
 }
 
 .folder-card-photography {
-  --folder-x: 8%;
+  --folder-x: clamp(-250px, -14vw, -176px);
   --folder-y: 24%;
   --folder-r: -1.5deg;
   --folder-s: 0.93;
@@ -770,7 +771,7 @@ h2 {
 }
 
 .folder-card-social {
-  --folder-x: 38%;
+  --folder-x: clamp(18px, 3vw, 48px);
   --folder-y: 33%;
   --folder-r: 1deg;
   --folder-s: 1;
@@ -1414,22 +1415,22 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: 18%;
+    --folder-x: clamp(-68px, -6vw, -42px);
     --folder-y: 0%;
   }
 
   .folder-card-branding {
-    --folder-x: 49%;
+    --folder-x: clamp(112px, 16vw, 176px);
     --folder-y: 8%;
   }
 
   .folder-card-photography {
-    --folder-x: 7%;
+    --folder-x: clamp(-176px, -18vw, -112px);
     --folder-y: 28%;
   }
 
   .folder-card-social {
-    --folder-x: 34%;
+    --folder-x: clamp(4px, 4vw, 38px);
     --folder-y: 36%;
   }
 
@@ -1570,25 +1571,25 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: 18%;
+    --folder-x: clamp(-44px, -8vw, -24px);
     --folder-y: 0%;
     --folder-s: 0.76;
   }
 
   .folder-card-branding {
-    --folder-x: 35%;
+    --folder-x: clamp(58px, 16vw, 104px);
     --folder-y: 12%;
     --folder-s: 0.78;
   }
 
   .folder-card-photography {
-    --folder-x: 5%;
+    --folder-x: clamp(-108px, -20vw, -64px);
     --folder-y: 28%;
     --folder-s: 0.82;
   }
 
   .folder-card-social {
-    --folder-x: 20%;
+    --folder-x: clamp(-18px, -2vw, -8px);
     --folder-y: 44%;
     --folder-s: 0.9;
   }
@@ -1938,15 +1939,15 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: 14%;
+    --folder-x: -30px;
   }
 
   .folder-card-branding {
-    --folder-x: 29%;
+    --folder-x: 72px;
   }
 
   .folder-card-social {
-    --folder-x: 15%;
+    --folder-x: -10px;
   }
 
   .brand {
