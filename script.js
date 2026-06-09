@@ -35,18 +35,19 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const duration = prefersReducedMotion ? 700 : 5000;
+  const duration = prefersReducedMotion ? 700 : 6800;
+  const cycleDuration = prefersReducedMotion ? 700 : 4200;
   const start = performance.now();
   const loaderSegments = [
-    { type: "hold", units: 0.65, scene: 0 },
-    { type: "move", units: 1, from: 0.10, to: 0.18 },
-    { type: "hold", units: 0.75, scene: 0.18 },
-    { type: "move", units: 1, from: 0.27, to: 0.56 },
-    { type: "hold", units: 0.75, scene: 0.56 },
-    { type: "move", units: 1, from: 0.68, to: 0.87 },
-    { type: "hold", units: 0.75, scene: 0.87 },
-    { type: "move", units: 1, from: 0.925, to: 0.995 },
-    { type: "hold", units: 0.65, scene: 0.995 },
+    { type: "hold", units: 0.85, scene: 0 },
+    { type: "move", units: 1.35, from: 0.10, to: 0.18 },
+    { type: "hold", units: 0.9, scene: 0.18 },
+    { type: "move", units: 1.35, from: 0.27, to: 0.56 },
+    { type: "hold", units: 0.9, scene: 0.56 },
+    { type: "move", units: 1.35, from: 0.68, to: 0.87 },
+    { type: "hold", units: 0.9, scene: 0.87 },
+    { type: "move", units: 1.35, from: 0.925, to: 0.995 },
+    { type: "hold", units: 0.85, scene: 0.995 },
   ];
   const loaderUnits = loaderSegments.reduce((total, segment) => total + segment.units, 0);
 
@@ -75,17 +76,19 @@ const runPageLoader = () => {
   };
 
   if (loaderLogo) {
-    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true });
+    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true, fixedScale: true });
   }
 
   const tick = (now) => {
+    const elapsed = now - start;
     const progress = Math.min((now - start) / duration, 1);
-    const sceneProgress = readLoaderSceneProgress(progress);
+    const loopProgress = progress >= 1 ? 1 : (elapsed % cycleDuration) / cycleDuration;
+    const sceneProgress = readLoaderSceneProgress(loopProgress);
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
 
     if (loaderLogo) {
-      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true });
+      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true, fixedScale: true });
     }
 
     if (progress < 1) {
@@ -517,6 +520,7 @@ const getHowWorkLogoState = (progress) => {
 const applyHowWorkLogoState = (target, state, options = {}) => {
   const logoWhite = options.colorOnly ? 0 : state.white;
   const circleOpacity = options.colorOnly ? 0 : state.circleOpacity;
+  const logoScale = options.fixedScale ? 1 : state.scale;
 
   target.style.setProperty("--work-logo-blue-opacity", state.blueOpacity.toFixed(3));
   target.style.setProperty("--work-logo-sage-opacity", state.sageOpacity.toFixed(3));
@@ -529,7 +533,7 @@ const applyHowWorkLogoState = (target, state, options = {}) => {
   target.style.setProperty("--work-logo-center-y-offset", "0%");
   target.style.setProperty("--work-logo-visible-x", `${state.visibleX.toFixed(1)}%`);
   target.style.setProperty("--work-logo-visible-y", `${state.visibleY.toFixed(1)}%`);
-  target.style.setProperty("--work-logo-scale", state.scale.toFixed(3));
+  target.style.setProperty("--work-logo-scale", logoScale.toFixed(3));
   target.style.setProperty("--work-logo-origin-x", "50%");
   target.style.setProperty("--work-logo-origin-y", "50%");
   target.style.setProperty("--work-logo-mask-solid", `${state.maskSolid.toFixed(1)}%`);
