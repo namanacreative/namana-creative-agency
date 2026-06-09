@@ -740,7 +740,7 @@ h2 {
 }
 
 .folder-card-compro {
-  --folder-x: 12%;
+  --folder-x: 20%;
   --folder-y: 0%;
   --folder-r: -3deg;
   --folder-s: 0.92;
@@ -750,7 +750,7 @@ h2 {
 }
 
 .folder-card-branding {
-  --folder-x: 44%;
+  --folder-x: 52%;
   --folder-y: 6%;
   --folder-r: 2.5deg;
   --folder-s: 0.92;
@@ -760,7 +760,7 @@ h2 {
 }
 
 .folder-card-photography {
-  --folder-x: 0%;
+  --folder-x: 8%;
   --folder-y: 24%;
   --folder-r: -1.5deg;
   --folder-s: 0.93;
@@ -770,7 +770,7 @@ h2 {
 }
 
 .folder-card-social {
-  --folder-x: 30%;
+  --folder-x: 38%;
   --folder-y: 33%;
   --folder-r: 1deg;
   --folder-s: 1;
@@ -1414,22 +1414,22 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: 13%;
+    --folder-x: 18%;
     --folder-y: 0%;
   }
 
   .folder-card-branding {
-    --folder-x: 44%;
+    --folder-x: 49%;
     --folder-y: 8%;
   }
 
   .folder-card-photography {
-    --folder-x: 2%;
+    --folder-x: 7%;
     --folder-y: 28%;
   }
 
   .folder-card-social {
-    --folder-x: 29%;
+    --folder-x: 34%;
     --folder-y: 36%;
   }
 
@@ -1570,25 +1570,25 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: 14%;
+    --folder-x: 18%;
     --folder-y: 0%;
     --folder-s: 0.76;
   }
 
   .folder-card-branding {
-    --folder-x: 31%;
+    --folder-x: 35%;
     --folder-y: 12%;
     --folder-s: 0.78;
   }
 
   .folder-card-photography {
-    --folder-x: 1%;
+    --folder-x: 5%;
     --folder-y: 28%;
     --folder-s: 0.82;
   }
 
   .folder-card-social {
-    --folder-x: 16%;
+    --folder-x: 20%;
     --folder-y: 44%;
     --folder-s: 0.9;
   }
@@ -1938,15 +1938,15 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: 10%;
+    --folder-x: 14%;
   }
 
   .folder-card-branding {
-    --folder-x: 25%;
+    --folder-x: 29%;
   }
 
   .folder-card-social {
-    --folder-x: 11%;
+    --folder-x: 15%;
   }
 
   .brand {
