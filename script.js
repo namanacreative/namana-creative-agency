@@ -76,7 +76,7 @@ const runPageLoader = () => {
   };
 
   if (loaderLogo) {
-    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true });
+    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true, fixedScale: true });
   }
 
   const tick = (now) => {
@@ -91,7 +91,7 @@ const runPageLoader = () => {
     loaderProgress.style.color = `rgb(${loaderTextTone}, ${loaderTextTone}, ${loaderTextTone})`;
 
     if (loaderLogo) {
-      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true });
+      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true, fixedScale: true });
     }
 
     if (progress < 1) {

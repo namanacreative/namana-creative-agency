@@ -157,6 +157,13 @@ a {
   --work-logo-crop-left: 0%;
 }
 
+.loader-logo-fill-mask {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(to top, #000 0 var(--loader-fill), transparent var(--loader-fill) 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 0 var(--loader-fill), transparent var(--loader-fill) 100%);
+}
+
 .loader-logo-stack {
   position: absolute;
   inset: 15%;
@@ -181,8 +188,6 @@ a {
 
 .loader-logo-stack-fill {
   filter: brightness(0) invert(1);
-  mask-image: linear-gradient(to top, #000 0 var(--loader-fill), transparent var(--loader-fill) 100%);
-  -webkit-mask-image: linear-gradient(to top, #000 0 var(--loader-fill), transparent var(--loader-fill) 100%);
 }
 
 .loader-logo-layer {
