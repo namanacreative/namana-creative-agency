@@ -3,7 +3,6 @@ const hero = document.querySelector(".hero");
 const typePrefix = document.querySelector("[data-type-prefix]");
 const typeStrong = document.querySelector("[data-type-strong]");
 const typeCaret = document.querySelector("[data-type-caret]");
-const revealItems = document.querySelectorAll(".reveal");
 const textRevealItems = Array.from(
   document.querySelectorAll(
     "main h1, main h2, main h3, main p, main .section-kicker, main .service-number, main .service-grid span, main .timeline span, main .about-values span, main .contact-form label span, footer span"
@@ -255,17 +254,6 @@ const typeHeroTitle = () => {
 typeHeroTitle();
 
 if ("IntersectionObserver" in window) {
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        entry.target.classList.toggle("is-visible", entry.isIntersecting);
-      });
-    },
-    { threshold: 0.16 }
-  );
-
-  revealItems.forEach((item) => revealObserver.observe(item));
-
   const objectRevealObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -294,7 +282,6 @@ if ("IntersectionObserver" in window) {
     textRevealObserver.observe(item);
   });
 } else {
-  revealItems.forEach((item) => item.classList.add("is-visible"));
   textRevealItems.forEach((item) => item.classList.add("is-text-visible"));
   objectRevealItems.forEach((item) => item.classList.add("is-object-visible"));
 }

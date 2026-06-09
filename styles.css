@@ -639,14 +639,14 @@ h2 {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(34px);
-  transition: opacity 720ms ease, transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .text-dissolve {
