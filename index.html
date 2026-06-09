@@ -16,16 +16,23 @@
       rel="stylesheet"
     >
     <style>
-      .page-loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;align-content:center;gap:22px;background:#050505;color:#fff}.loader-logo{position:relative;width:clamp(96px,11vw,138px);aspect-ratio:1}.loader-logo-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.loader-progress{margin:0;font-family:"Bricolage Grotesque",Urbanist,sans-serif;font-weight:800}
+      .page-loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;align-content:center;gap:22px;background:#050505;color:#fff}.loader-logo{position:relative;width:min(58vw,62vh,600px);aspect-ratio:1}.loader-logo-stack{position:absolute;inset:15%}.loader-logo-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.loader-progress{margin:0;font-family:"Bricolage Grotesque",Urbanist,sans-serif;font-weight:800}
     </style>
-    <link rel="stylesheet" href="styles.css?v=loader-fix-5">
+    <link rel="stylesheet" href="styles.css?v=loader-fix-6">
   </head>
   <body class="page-home">
     <div class="page-loader" data-page-loader aria-label="Loading Namana website">
       <div class="loader-logo" aria-hidden="true">
-        <img class="loader-logo-layer loader-logo-pink" src="assets/namana-work-logo-pink.png" alt="">
-        <img class="loader-logo-layer loader-logo-blue" src="assets/namana-work-logo-blue.png" alt="">
-        <img class="loader-logo-layer loader-logo-sage" src="assets/namana-work-logo-sage.png" alt="">
+        <div class="loader-logo-stack loader-logo-stack-base">
+          <img class="loader-logo-layer loader-logo-pink" src="assets/namana-work-logo-pink.png" alt="">
+          <img class="loader-logo-layer loader-logo-blue" src="assets/namana-work-logo-blue.png" alt="">
+          <img class="loader-logo-layer loader-logo-sage" src="assets/namana-work-logo-sage.png" alt="">
+        </div>
+        <div class="loader-logo-stack loader-logo-stack-fill">
+          <img class="loader-logo-layer loader-logo-pink" src="assets/namana-work-logo-pink.png" alt="">
+          <img class="loader-logo-layer loader-logo-blue" src="assets/namana-work-logo-blue.png" alt="">
+          <img class="loader-logo-layer loader-logo-sage" src="assets/namana-work-logo-sage.png" alt="">
+        </div>
       </div>
       <p class="loader-progress" data-loader-progress>LOADING 0%</p>
     </div>
@@ -192,6 +199,6 @@
       <span>namanacreative@gmail.com / @namanacreative</span>
     </footer>
 
-    <script src="script.js?v=loader-fix-5"></script>
+    <script src="script.js?v=loader-fix-6"></script>
   </body>
 </html>

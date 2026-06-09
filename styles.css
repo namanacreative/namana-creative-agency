@@ -111,6 +111,8 @@ a {
 }
 
 .page-loader {
+  --work-logo-size: min(58vw, 62vh, 600px);
+  --loader-fill: 0%;
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -135,9 +137,10 @@ a {
 
 .loader-logo {
   position: relative;
-  width: clamp(96px, 11vw, 138px);
+  width: var(--work-logo-size);
   aspect-ratio: 1;
-  overflow: hidden;
+  max-width: calc(100vw - 48px);
+  overflow: visible;
   --work-logo-blue-opacity: 1;
   --work-logo-sage-opacity: 1;
   --work-logo-pink-opacity: 1;
@@ -152,6 +155,11 @@ a {
   --work-logo-crop-right: 0%;
   --work-logo-crop-bottom: 0%;
   --work-logo-crop-left: 0%;
+}
+
+.loader-logo-stack {
+  position: absolute;
+  inset: 15%;
   clip-path: inset(
     var(--work-logo-crop-top)
     var(--work-logo-crop-right)
@@ -165,6 +173,16 @@ a {
     scale(var(--work-logo-scale));
   transform-origin: var(--work-logo-origin-x) var(--work-logo-origin-y);
   will-change: clip-path, transform;
+}
+
+.loader-logo-stack-base {
+  filter: brightness(0) invert(0.18);
+}
+
+.loader-logo-stack-fill {
+  filter: brightness(0) invert(1);
+  mask-image: linear-gradient(to top, #000 0 var(--loader-fill), transparent var(--loader-fill) 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 0 var(--loader-fill), transparent var(--loader-fill) 100%);
 }
 
 .loader-logo-layer {

@@ -76,7 +76,7 @@ const runPageLoader = () => {
   };
 
   if (loaderLogo) {
-    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true, fixedScale: true });
+    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true });
   }
 
   const tick = (now) => {
@@ -86,9 +86,12 @@ const runPageLoader = () => {
     const sceneProgress = readLoaderSceneProgress(loopProgress);
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
+    pageLoader.style.setProperty("--loader-fill", `${percentage}%`);
+    const loaderTextTone = Math.round(78 + progress * 177);
+    loaderProgress.style.color = `rgb(${loaderTextTone}, ${loaderTextTone}, ${loaderTextTone})`;
 
     if (loaderLogo) {
-      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true, fixedScale: true });
+      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true });
     }
 
     if (progress < 1) {
