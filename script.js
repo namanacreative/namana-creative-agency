@@ -35,23 +35,43 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const duration = prefersReducedMotion ? 700 : 6800;
-  const cycleDuration = prefersReducedMotion ? 700 : 4200;
+  const duration = prefersReducedMotion ? 700 : 9200;
+  const cycleDuration = prefersReducedMotion ? 700 : 7600;
   const start = performance.now();
   const loaderSegments = [
     { type: "hold", units: 0.85, scene: 0 },
-    { type: "move", units: 1.35, from: 0.10, to: 0.18 },
+    { type: "move", units: 1.6, from: 0.10, to: 0.18 },
     { type: "hold", units: 0.9, scene: 0.18 },
-    { type: "move", units: 1.35, from: 0.27, to: 0.56 },
+    { type: "move", units: 1.6, from: 0.27, to: 0.56 },
     { type: "hold", units: 0.9, scene: 0.56 },
-    { type: "move", units: 1.35, from: 0.68, to: 0.87 },
+    { type: "move", units: 1.6, from: 0.68, to: 0.87 },
     { type: "hold", units: 0.9, scene: 0.87 },
-    { type: "move", units: 1.35, from: 0.925, to: 0.995 },
+    { type: "move", units: 1.6, from: 0.925, to: 0.995 },
     { type: "hold", units: 0.85, scene: 0.995 },
+    { type: "return", units: 1.85, from: 0.995, to: 0 },
+    { type: "hold", units: 0.55, scene: 0 },
   ];
   const loaderUnits = loaderSegments.reduce((total, segment) => total + segment.units, 0);
+  const lerp = (startValue, endValue, value) => startValue + (endValue - startValue) * value;
+  const interpolateLogoState = (from, to, value) => ({
+    blueOpacity: lerp(from.blueOpacity, to.blueOpacity, value),
+    sageOpacity: lerp(from.sageOpacity, to.sageOpacity, value),
+    pinkOpacity: lerp(from.pinkOpacity, to.pinkOpacity, value),
+    white: lerp(from.white, to.white, value),
+    circleOpacity: lerp(from.circleOpacity, to.circleOpacity, value),
+    rotate: lerp(from.rotate, to.rotate, value),
+    flip: lerp(from.flip, to.flip, value),
+    visibleX: lerp(from.visibleX, to.visibleX, value),
+    visibleY: lerp(from.visibleY, to.visibleY, value),
+    scale: lerp(from.scale, to.scale, value),
+    maskSolid: lerp(from.maskSolid, to.maskSolid, value),
+    cropTop: lerp(from.cropTop, to.cropTop, value),
+    cropRight: lerp(from.cropRight, to.cropRight, value),
+    cropBottom: lerp(from.cropBottom, to.cropBottom, value),
+    cropLeft: lerp(from.cropLeft, to.cropLeft, value),
+  });
 
-  const readLoaderSceneProgress = (value) => {
+  const readLoaderLogoState = (value) => {
     let cursor = 0;
 
     for (const segment of loaderSegments) {
@@ -60,19 +80,27 @@ const runPageLoader = () => {
 
       if (value <= endAt) {
         if (segment.type === "hold") {
-          return segment.scene;
+          return getHowWorkLogoState(segment.scene);
         }
 
         const localProgress = (value - startAt) / Math.max(endAt - startAt, 0.001);
         const easedProgress = easeInOutCubic(clamp(localProgress, 0, 1));
 
-        return segment.from + (segment.to - segment.from) * easedProgress;
+        if (segment.type === "return") {
+          return interpolateLogoState(
+            getHowWorkLogoState(segment.from),
+            getHowWorkLogoState(segment.to),
+            easedProgress
+          );
+        }
+
+        return getHowWorkLogoState(segment.from + (segment.to - segment.from) * easedProgress);
       }
 
       cursor += segment.units;
     }
 
-    return loaderSegments[loaderSegments.length - 1].scene;
+    return getHowWorkLogoState(loaderSegments[loaderSegments.length - 1].scene);
   };
 
   if (loaderLogo) {
@@ -83,7 +111,7 @@ const runPageLoader = () => {
     const elapsed = now - start;
     const progress = Math.min((now - start) / duration, 1);
     const loopProgress = progress >= 1 ? 1 : (elapsed % cycleDuration) / cycleDuration;
-    const sceneProgress = readLoaderSceneProgress(loopProgress);
+    const logoState = readLoaderLogoState(loopProgress);
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
     pageLoader.style.setProperty("--loader-fill", `${percentage}%`);
@@ -91,7 +119,7 @@ const runPageLoader = () => {
     loaderProgress.style.color = `rgb(${loaderTextTone}, ${loaderTextTone}, ${loaderTextTone})`;
 
     if (loaderLogo) {
-      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true, minScale: true });
+      applyHowWorkLogoState(loaderLogo, logoState, { colorOnly: true, minScale: true });
     }
 
     if (progress < 1) {
