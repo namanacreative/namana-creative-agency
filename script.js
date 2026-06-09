@@ -1,5 +1,7 @@
 const header = document.querySelector("[data-header]");
 const hero = document.querySelector(".hero");
+const pageLoader = document.querySelector("[data-page-loader]");
+const loaderProgress = document.querySelector("[data-loader-progress]");
 const typePrefix = document.querySelector("[data-type-prefix]");
 const typeStrong = document.querySelector("[data-type-strong]");
 const typeCaret = document.querySelector("[data-type-caret]");
@@ -23,6 +25,39 @@ const note = document.querySelector("[data-form-note]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const mobileSceneQuery = window.matchMedia("(max-width: 980px)");
 
+if (pageLoader) {
+  document.body.classList.add("is-loading");
+}
+
+const runPageLoader = () => {
+  if (!pageLoader || !loaderProgress) {
+    return;
+  }
+
+  const duration = prefersReducedMotion ? 600 : 3400;
+  const start = performance.now();
+
+  const tick = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const percentage = Math.round(progress * 100);
+    loaderProgress.textContent = `LOADING ${percentage}%`;
+
+    if (progress < 1) {
+      window.requestAnimationFrame(tick);
+      return;
+    }
+
+    pageLoader.classList.add("is-loaded");
+    document.body.classList.remove("is-loading");
+
+    window.setTimeout(() => {
+      pageLoader.remove();
+    }, 560);
+  };
+
+  window.requestAnimationFrame(tick);
+};
+
 const updateHeader = () => {
   if (header.classList.contains("is-menu-open")) {
     header.classList.add("is-scrolled");
@@ -34,6 +69,14 @@ const updateHeader = () => {
 
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
+
+if (pageLoader) {
+  if (document.readyState === "complete") {
+    runPageLoader();
+  } else {
+    window.addEventListener("load", runPageLoader, { once: true });
+  }
+}
 
 const updateHowWorkCanvas = () => {
   if (!howWork || !document.body.classList.contains("page-about")) {
