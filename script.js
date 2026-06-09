@@ -34,13 +34,50 @@ const runPageLoader = () => {
     return;
   }
 
-  const duration = prefersReducedMotion ? 600 : 3400;
+  const loaderLogo = pageLoader.querySelector(".loader-logo");
+  const duration = prefersReducedMotion ? 700 : 3800;
   const start = performance.now();
+  const loaderStops = [
+    { at: 0, scene: 0 },
+    { at: 0.16, scene: 0.18 },
+    { at: 0.27, scene: 0.18 },
+    { at: 0.43, scene: 0.56 },
+    { at: 0.54, scene: 0.56 },
+    { at: 0.70, scene: 0.87 },
+    { at: 0.81, scene: 0.87 },
+    { at: 0.94, scene: 0.995 },
+    { at: 1, scene: 0.995 },
+  ];
+
+  const readLoaderSceneProgress = (value) => {
+    for (let index = 0; index < loaderStops.length - 1; index += 1) {
+      const current = loaderStops[index];
+      const next = loaderStops[index + 1];
+
+      if (value <= next.at) {
+        const localProgress = (value - current.at) / Math.max(next.at - current.at, 0.001);
+        const easedProgress = easeInOutCubic(clamp(localProgress, 0, 1));
+
+        return current.scene + (next.scene - current.scene) * easedProgress;
+      }
+    }
+
+    return loaderStops[loaderStops.length - 1].scene;
+  };
+
+  if (loaderLogo) {
+    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true });
+  }
 
   const tick = (now) => {
     const progress = Math.min((now - start) / duration, 1);
+    const sceneProgress = readLoaderSceneProgress(progress);
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
+
+    if (loaderLogo) {
+      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true });
+    }
 
     if (progress < 1) {
       window.requestAnimationFrame(tick);
@@ -385,6 +422,114 @@ const visibleCropOffset = (top, right, bottom, left) => {
     y: 50 - centerY,
   };
 };
+
+const getHowWorkLogoState = (progress) => {
+  const morphProgress = easeInOutCubic(progressBetween(progress, 0.10, 0.16));
+  const empathyFinal = easeInOutCubic(progressBetween(progress, 0.16, 0.18));
+  const empathyOut = easeInOutCubic(progressBetween(progress, 0.27, 0.32));
+  const colorReturn = easeInOutCubic(progressBetween(progress, 0.32, 0.36));
+  const scrollRotateProgress = easeInOutCubic(progressBetween(progress, 0.36, 0.42));
+  const blueRemove = easeInOutCubic(progressBetween(progress, 0.43, 0.49));
+  const cropProgress = easeInOutCubic(progressBetween(progress, 0.47, 0.53));
+  const discussionFinal = easeInOutCubic(progressBetween(progress, 0.53, 0.56));
+  const discussionOut = easeInOutCubic(progressBetween(progress, 0.68, 0.73));
+  const logoRestore = easeInOutCubic(progressBetween(progress, 0.73, 0.78));
+  const creationBlueGone = easeInOutCubic(progressBetween(progress, 0.74, 0.80));
+  const creationShapeCrop = easeInOutCubic(progressBetween(progress, 0.76, 0.82));
+  const creationTurn = easeInOutCubic(progressBetween(progress, 0.78, 0.84));
+  const creationFinal = easeInOutCubic(progressBetween(progress, 0.84, 0.87));
+  const creationOut = easeInOutCubic(progressBetween(progress, 0.925, 0.95));
+  const growthReturn = easeInOutCubic(progressBetween(progress, 0.925, 0.95));
+  const growthRemove = easeInOutCubic(progressBetween(progress, 0.95, 0.97));
+  const growthWhite = easeInOutCubic(progressBetween(progress, 0.965, 0.98));
+  const empathyWhite = empathyFinal * (1 - empathyOut);
+  const discussionWhite = discussionFinal * (1 - discussionOut);
+  const creationWhite = creationFinal * (1 - creationOut);
+  const logoWhite = Math.max(empathyWhite, discussionWhite, creationWhite, growthWhite);
+  const growthCircle = easeInOutCubic(progressBetween(progress, 0.965, 0.98));
+  const logoCircleOpacity = Math.max(empathyWhite, discussionWhite, creationWhite, growthCircle);
+  const preDiscussionBlue = progress < 0.32 ? 1 - morphProgress : colorReturn;
+  const preDiscussionSage = progress < 0.32 ? 1 - morphProgress : colorReturn;
+  const preDiscussionPink = progress < 0.32 ? 1 - morphProgress * 0.18 : 0.82 + colorReturn * 0.18;
+
+  const rotateProgress = scrollRotateProgress;
+  const restoredLogo = rotateProgress * (1 - logoRestore);
+  const logoRotate = (restoredLogo * 180 - 45 * creationTurn) * (1 - growthReturn);
+  const logoFlip = restoredLogo * 180 * (1 - growthReturn);
+  const logoBlueOpacity =
+    (preDiscussionBlue * (1 - blueRemove) * (1 - logoRestore) + logoRestore * (1 - creationBlueGone)) *
+    (1 - growthRemove);
+  const logoSageOpacity = preDiscussionSage * (1 - logoRestore) + logoRestore;
+  const logoPinkOpacity =
+    (preDiscussionPink * (1 - logoRestore) + logoRestore) * (1 - growthRemove);
+  const finalCrop = cropProgress * (1 - logoRestore) * (1 - growthReturn);
+  const boxTop = 0;
+  const growthCropRight = 0.2;
+  const growthCropBottom = 60.6;
+  const growthCropLeft = 59.6;
+  const boxRight = creationShapeCrop * 12 * (1 - growthReturn) + growthCropRight * growthRemove;
+  const boxBottom = creationShapeCrop * 46 * (1 - growthReturn) + growthCropBottom * growthRemove;
+  const boxLeft = creationShapeCrop * 34 * (1 - growthReturn) + growthCropLeft * growthRemove;
+  const cropLeft = finalCrop * 50 + boxLeft;
+  const cropRight = boxRight;
+  const cropTop = boxTop;
+  const cropBottom = boxBottom;
+  const visibleOffset = visibleCropOffset(cropTop, cropRight, cropBottom, cropLeft);
+  const finalCreationOffset = visibleCropOffset(0, 12, 46, 84);
+  const creationPixelOffsetX = -12.5;
+  const creationPixelOffsetY = 31;
+  const creationRotationCentering = creationShapeCrop * creationTurn * (1 - growthReturn);
+  const logoVisibleX =
+    visibleOffset.x + (creationPixelOffsetX - finalCreationOffset.x) * creationRotationCentering - growthRemove * 29;
+  const logoVisibleY =
+    visibleOffset.y + (creationPixelOffsetY - finalCreationOffset.y) * creationRotationCentering + growthRemove * 29;
+  const empathyScaleCorrection = empathyWhite * 0.14 * (1 - discussionWhite) * (1 - creationWhite) * (1 - growthRemove);
+  const logoScale = 1 - empathyScaleCorrection + creationShapeCrop * 0.32 * (1 - growthReturn) + growthRemove * 0.74;
+
+  return {
+    blueOpacity: logoBlueOpacity,
+    sageOpacity: logoSageOpacity,
+    pinkOpacity: logoPinkOpacity,
+    white: logoWhite,
+    circleOpacity: logoCircleOpacity,
+    rotate: logoRotate,
+    flip: logoFlip,
+    visibleX: logoVisibleX,
+    visibleY: logoVisibleY,
+    scale: logoScale,
+    maskSolid: 72 + creationShapeCrop * 28,
+    cropTop,
+    cropRight,
+    cropBottom,
+    cropLeft,
+  };
+};
+
+const applyHowWorkLogoState = (target, state, options = {}) => {
+  const logoWhite = options.colorOnly ? 0 : state.white;
+  const circleOpacity = options.colorOnly ? 0 : state.circleOpacity;
+
+  target.style.setProperty("--work-logo-blue-opacity", state.blueOpacity.toFixed(3));
+  target.style.setProperty("--work-logo-sage-opacity", state.sageOpacity.toFixed(3));
+  target.style.setProperty("--work-logo-pink-opacity", state.pinkOpacity.toFixed(3));
+  target.style.setProperty("--work-logo-white", logoWhite.toFixed(3));
+  target.style.setProperty("--work-logo-circle-opacity", circleOpacity.toFixed(3));
+  target.style.setProperty("--work-logo-rotate", `${state.rotate.toFixed(1)}deg`);
+  target.style.setProperty("--work-logo-flip-y", `${state.flip.toFixed(1)}deg`);
+  target.style.setProperty("--work-logo-center-offset", "0%");
+  target.style.setProperty("--work-logo-center-y-offset", "0%");
+  target.style.setProperty("--work-logo-visible-x", `${state.visibleX.toFixed(1)}%`);
+  target.style.setProperty("--work-logo-visible-y", `${state.visibleY.toFixed(1)}%`);
+  target.style.setProperty("--work-logo-scale", state.scale.toFixed(3));
+  target.style.setProperty("--work-logo-origin-x", "50%");
+  target.style.setProperty("--work-logo-origin-y", "50%");
+  target.style.setProperty("--work-logo-mask-solid", `${state.maskSolid.toFixed(1)}%`);
+  target.style.setProperty("--work-logo-crop-top", `${state.cropTop.toFixed(1)}%`);
+  target.style.setProperty("--work-logo-crop-right", `${state.cropRight.toFixed(1)}%`);
+  target.style.setProperty("--work-logo-crop-bottom", `${state.cropBottom.toFixed(1)}%`);
+  target.style.setProperty("--work-logo-crop-left", `${state.cropLeft.toFixed(1)}%`);
+};
+
 let howWorkTargetProgress = 0;
 let howWorkRenderProgress = 0;
 let howWorkProgressReady = false;

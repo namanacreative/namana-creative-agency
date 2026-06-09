@@ -137,9 +137,34 @@ a {
   position: relative;
   width: clamp(96px, 11vw, 138px);
   aspect-ratio: 1;
-  overflow: visible;
-  animation: loaderLogoFrame 3.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-  transform-origin: center;
+  overflow: hidden;
+  --work-logo-blue-opacity: 1;
+  --work-logo-sage-opacity: 1;
+  --work-logo-pink-opacity: 1;
+  --work-logo-rotate: 0deg;
+  --work-logo-flip-y: 0deg;
+  --work-logo-visible-x: 0%;
+  --work-logo-visible-y: 0%;
+  --work-logo-scale: 1;
+  --work-logo-origin-x: 50%;
+  --work-logo-origin-y: 50%;
+  --work-logo-crop-top: 0%;
+  --work-logo-crop-right: 0%;
+  --work-logo-crop-bottom: 0%;
+  --work-logo-crop-left: 0%;
+  clip-path: inset(
+    var(--work-logo-crop-top)
+    var(--work-logo-crop-right)
+    var(--work-logo-crop-bottom)
+    var(--work-logo-crop-left)
+  );
+  transform:
+    translate3d(var(--work-logo-visible-x), var(--work-logo-visible-y), 0)
+    rotate(var(--work-logo-rotate))
+    rotateY(var(--work-logo-flip-y))
+    scale(var(--work-logo-scale));
+  transform-origin: var(--work-logo-origin-x) var(--work-logo-origin-y);
+  will-change: clip-path, transform;
 }
 
 .loader-logo-layer {
@@ -148,20 +173,19 @@ a {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transform-origin: center;
-  will-change: opacity, clip-path, transform;
+  will-change: opacity;
 }
 
 .loader-logo-pink {
-  animation: loaderPinkMorph 3.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  opacity: var(--work-logo-pink-opacity);
 }
 
 .loader-logo-blue {
-  animation: loaderBlueMorph 3.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  opacity: var(--work-logo-blue-opacity);
 }
 
 .loader-logo-sage {
-  animation: loaderSageMorph 3.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  opacity: var(--work-logo-sage-opacity);
 }
 
 .loader-progress {
@@ -173,127 +197,6 @@ a {
   font-weight: 800;
   letter-spacing: 0;
   text-align: center;
-}
-
-@keyframes loaderLogoFrame {
-  0%,
-  14% {
-    transform: rotate(0deg) scale(1);
-  }
-
-  28% {
-    transform: rotate(0deg) scale(0.96);
-  }
-
-  46% {
-    transform: rotate(180deg) scale(0.96);
-  }
-
-  66% {
-    transform: rotate(-45deg) scale(0.94);
-  }
-
-  84% {
-    transform: rotate(0deg) scale(1.04);
-  }
-
-  100% {
-    transform: rotate(0deg) scale(1);
-  }
-}
-
-@keyframes loaderPinkMorph {
-  0%,
-  14% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  28% {
-    opacity: 0.86;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0) scale(0.9);
-  }
-
-  46% {
-    opacity: 1;
-    clip-path: inset(0 0 0 50%);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  66% {
-    opacity: 1;
-    clip-path: inset(0 12% 46% 34%);
-    transform: translate3d(-12.5%, 31%, 0) scale(1.32);
-  }
-
-  84% {
-    opacity: 0;
-    clip-path: inset(0 0.2% 60.6% 59.6%);
-    transform: translate3d(-29%, 29%, 0) scale(1.74);
-  }
-
-  100% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-}
-
-@keyframes loaderBlueMorph {
-  0%,
-  14% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-
-  28%,
-  46%,
-  66%,
-  84% {
-    opacity: 0;
-    clip-path: inset(0 0 0 0);
-  }
-
-  100% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@keyframes loaderSageMorph {
-  0%,
-  14% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  28%,
-  46% {
-    opacity: 0;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  66% {
-    opacity: 1;
-    clip-path: inset(0 12% 46% 34%);
-    transform: translate3d(-12.5%, 31%, 0) scale(1.32);
-  }
-
-  84% {
-    opacity: 1;
-    clip-path: inset(0 0.2% 60.6% 59.6%);
-    transform: translate3d(-29%, 29%, 0) scale(1.74);
-  }
-
-  100% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
 }
 
 .site-header {
