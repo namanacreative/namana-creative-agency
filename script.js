@@ -9,6 +9,11 @@ const textRevealItems = Array.from(
     "main h1, main h2, main h3, main p, main .section-kicker, main .service-number, main .service-grid span, main .timeline span, main .about-values span, main .contact-form label span, footer span"
   )
 ).filter((item) => !item.closest(".hero, .how-work, .project-folders"));
+const objectRevealItems = Array.from(
+  document.querySelectorAll(
+    ".intro-content, .intro-cta, .service-grid article, .timeline article, .contact-form, .folder-card img, .about-hero-content, .about-values article"
+  )
+).filter((item) => !item.closest(".hero, .how-work"));
 const howWork = document.querySelector("[data-how-work]");
 const howWorkScene = document.querySelector(".how-work-scene");
 const menuToggle = document.querySelector("[data-menu-toggle]");
@@ -253,16 +258,27 @@ if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          revealObserver.unobserve(entry.target);
-        }
+        entry.target.classList.toggle("is-visible", entry.isIntersecting);
       });
     },
     { threshold: 0.16 }
   );
 
   revealItems.forEach((item) => revealObserver.observe(item));
+
+  const objectRevealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("is-object-visible", entry.isIntersecting);
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.16 }
+  );
+
+  objectRevealItems.forEach((item) => {
+    item.classList.add("object-dissolve");
+    objectRevealObserver.observe(item);
+  });
 
   const textRevealObserver = new IntersectionObserver(
     (entries) => {
@@ -280,6 +296,7 @@ if ("IntersectionObserver" in window) {
 } else {
   revealItems.forEach((item) => item.classList.add("is-visible"));
   textRevealItems.forEach((item) => item.classList.add("is-text-visible"));
+  objectRevealItems.forEach((item) => item.classList.add("is-object-visible"));
 }
 
 if (form && note) {
