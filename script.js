@@ -35,34 +35,43 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const duration = prefersReducedMotion ? 700 : 3800;
+  const duration = prefersReducedMotion ? 700 : 5000;
   const start = performance.now();
-  const loaderStops = [
-    { at: 0, scene: 0 },
-    { at: 0.16, scene: 0.18 },
-    { at: 0.27, scene: 0.18 },
-    { at: 0.43, scene: 0.56 },
-    { at: 0.54, scene: 0.56 },
-    { at: 0.70, scene: 0.87 },
-    { at: 0.81, scene: 0.87 },
-    { at: 0.94, scene: 0.995 },
-    { at: 1, scene: 0.995 },
+  const loaderSegments = [
+    { type: "hold", units: 0.65, scene: 0 },
+    { type: "move", units: 1, from: 0.10, to: 0.18 },
+    { type: "hold", units: 0.75, scene: 0.18 },
+    { type: "move", units: 1, from: 0.27, to: 0.56 },
+    { type: "hold", units: 0.75, scene: 0.56 },
+    { type: "move", units: 1, from: 0.68, to: 0.87 },
+    { type: "hold", units: 0.75, scene: 0.87 },
+    { type: "move", units: 1, from: 0.925, to: 0.995 },
+    { type: "hold", units: 0.65, scene: 0.995 },
   ];
+  const loaderUnits = loaderSegments.reduce((total, segment) => total + segment.units, 0);
 
   const readLoaderSceneProgress = (value) => {
-    for (let index = 0; index < loaderStops.length - 1; index += 1) {
-      const current = loaderStops[index];
-      const next = loaderStops[index + 1];
+    let cursor = 0;
 
-      if (value <= next.at) {
-        const localProgress = (value - current.at) / Math.max(next.at - current.at, 0.001);
+    for (const segment of loaderSegments) {
+      const startAt = cursor / loaderUnits;
+      const endAt = (cursor + segment.units) / loaderUnits;
+
+      if (value <= endAt) {
+        if (segment.type === "hold") {
+          return segment.scene;
+        }
+
+        const localProgress = (value - startAt) / Math.max(endAt - startAt, 0.001);
         const easedProgress = easeInOutCubic(clamp(localProgress, 0, 1));
 
-        return current.scene + (next.scene - current.scene) * easedProgress;
+        return segment.from + (segment.to - segment.from) * easedProgress;
       }
+
+      cursor += segment.units;
     }
 
-    return loaderStops[loaderStops.length - 1].scene;
+    return loaderSegments[loaderSegments.length - 1].scene;
   };
 
   if (loaderLogo) {
