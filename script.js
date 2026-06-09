@@ -76,7 +76,7 @@ const runPageLoader = () => {
   };
 
   if (loaderLogo) {
-    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true, fixedScale: true });
+    applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(0), { colorOnly: true, minScale: true });
   }
 
   const tick = (now) => {
@@ -91,7 +91,7 @@ const runPageLoader = () => {
     loaderProgress.style.color = `rgb(${loaderTextTone}, ${loaderTextTone}, ${loaderTextTone})`;
 
     if (loaderLogo) {
-      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true, fixedScale: true });
+      applyHowWorkLogoState(loaderLogo, getHowWorkLogoState(sceneProgress), { colorOnly: true, minScale: true });
     }
 
     if (progress < 1) {
@@ -523,7 +523,7 @@ const getHowWorkLogoState = (progress) => {
 const applyHowWorkLogoState = (target, state, options = {}) => {
   const logoWhite = options.colorOnly ? 0 : state.white;
   const circleOpacity = options.colorOnly ? 0 : state.circleOpacity;
-  const logoScale = options.fixedScale ? 1 : state.scale;
+  const logoScale = options.fixedScale ? 1 : options.minScale ? Math.max(1, state.scale) : state.scale;
 
   target.style.setProperty("--work-logo-blue-opacity", state.blueOpacity.toFixed(3));
   target.style.setProperty("--work-logo-sage-opacity", state.sageOpacity.toFixed(3));
