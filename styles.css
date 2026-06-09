@@ -135,7 +135,7 @@ a {
 
 .loader-logo {
   position: relative;
-  width: clamp(124px, 16vw, 190px);
+  width: clamp(96px, 11vw, 138px);
   aspect-ratio: 1;
   overflow: visible;
   animation: loaderLogoFrame 3.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
