@@ -923,7 +923,7 @@ h2 {
 }
 
 .folder-card-compro {
-  --folder-x: clamp(-84px, -5vw, -56px);
+  --folder-x: clamp(-112px, -7vw, -78px);
   --folder-y: 0%;
   --folder-r: -3deg;
   --folder-s: 0.92;
@@ -933,7 +933,7 @@ h2 {
 }
 
 .folder-card-branding {
-  --folder-x: clamp(180px, 14vw, 250px);
+  --folder-x: clamp(210px, 16vw, 292px);
   --folder-y: 6%;
   --folder-r: 2.5deg;
   --folder-s: 0.92;
@@ -943,7 +943,7 @@ h2 {
 }
 
 .folder-card-photography {
-  --folder-x: clamp(-250px, -14vw, -176px);
+  --folder-x: clamp(-292px, -16vw, -210px);
   --folder-y: 24%;
   --folder-r: -1.5deg;
   --folder-s: 0.93;
@@ -953,7 +953,7 @@ h2 {
 }
 
 .folder-card-social {
-  --folder-x: clamp(18px, 3vw, 48px);
+  --folder-x: clamp(28px, 4vw, 68px);
   --folder-y: 33%;
   --folder-r: 1deg;
   --folder-s: 1;
@@ -1597,22 +1597,22 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: clamp(-68px, -6vw, -42px);
+    --folder-x: clamp(-82px, -8vw, -54px);
     --folder-y: 0%;
   }
 
   .folder-card-branding {
-    --folder-x: clamp(112px, 16vw, 176px);
+    --folder-x: clamp(128px, 18vw, 202px);
     --folder-y: 8%;
   }
 
   .folder-card-photography {
-    --folder-x: clamp(-176px, -18vw, -112px);
+    --folder-x: clamp(-202px, -20vw, -128px);
     --folder-y: 28%;
   }
 
   .folder-card-social {
-    --folder-x: clamp(4px, 4vw, 38px);
+    --folder-x: clamp(10px, 5vw, 46px);
     --folder-y: 36%;
   }
 
@@ -1744,7 +1744,7 @@ button {
   }
 
   .folder-stack {
-    width: min(440px, calc(100vw - 28px));
+    width: min(460px, calc(100vw - 20px));
     height: clamp(440px, 112vw, 560px);
   }
 
@@ -1753,25 +1753,25 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: clamp(-34px, -7vw, -20px);
+    --folder-x: clamp(-48px, -10vw, -34px);
     --folder-y: 0%;
     --folder-s: 0.76;
   }
 
   .folder-card-branding {
-    --folder-x: clamp(44px, 12vw, 76px);
+    --folder-x: clamp(62px, 15vw, 88px);
     --folder-y: 12%;
     --folder-s: 0.78;
   }
 
   .folder-card-photography {
-    --folder-x: clamp(-72px, -16vw, -48px);
+    --folder-x: clamp(-92px, -21vw, -68px);
     --folder-y: 28%;
     --folder-s: 0.82;
   }
 
   .folder-card-social {
-    --folder-x: 0px;
+    --folder-x: clamp(8px, 3vw, 18px);
     --folder-y: 44%;
     --folder-s: 0.9;
   }
@@ -2121,19 +2121,19 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: -22px;
+    --folder-x: -38px;
   }
 
   .folder-card-branding {
-    --folder-x: 48px;
+    --folder-x: 70px;
   }
 
   .folder-card-photography {
-    --folder-x: -52px;
+    --folder-x: -72px;
   }
 
   .folder-card-social {
-    --folder-x: 0px;
+    --folder-x: 10px;
   }
 
   .brand {
