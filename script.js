@@ -35,20 +35,20 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const duration = prefersReducedMotion ? 700 : 9200;
-  const cycleDuration = prefersReducedMotion ? 700 : 7600;
+  const duration = prefersReducedMotion ? 700 : 14000;
+  const cycleDuration = prefersReducedMotion ? 700 : 11800;
   const start = performance.now();
   const loaderSegments = [
     { type: "hold", units: 0.85, scene: 0 },
-    { type: "move", units: 1.6, from: 0.10, to: 0.18 },
-    { type: "hold", units: 0.9, scene: 0.18 },
-    { type: "move", units: 1.6, from: 0.27, to: 0.56 },
-    { type: "hold", units: 0.9, scene: 0.56 },
-    { type: "move", units: 1.6, from: 0.68, to: 0.87 },
-    { type: "hold", units: 0.9, scene: 0.87 },
-    { type: "move", units: 1.6, from: 0.925, to: 0.995 },
+    { type: "move", units: 2.25, from: 0.10, to: 0.18 },
+    { type: "hold", units: 1.05, scene: 0.18 },
+    { type: "move", units: 2.25, from: 0.27, to: 0.56 },
+    { type: "hold", units: 1.05, scene: 0.56 },
+    { type: "move", units: 2.25, from: 0.68, to: 0.87 },
+    { type: "hold", units: 1.05, scene: 0.87 },
+    { type: "move", units: 2.25, from: 0.925, to: 0.995 },
     { type: "hold", units: 0.85, scene: 0.995 },
-    { type: "return", units: 1.85, from: 0.995, to: 0 },
+    { type: "return", units: 2.5, from: 0.995, to: 0 },
     { type: "hold", units: 0.55, scene: 0 },
   ];
   const loaderUnits = loaderSegments.reduce((total, segment) => total + segment.units, 0);
