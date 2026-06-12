@@ -136,6 +136,10 @@ a {
   pointer-events: none;
 }
 
+.page-loader.is-skipped {
+  display: none;
+}
+
 .loader-logo {
   position: relative;
   width: var(--work-logo-size);

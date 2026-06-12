@@ -25,8 +25,49 @@ const note = document.querySelector("[data-form-note]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const mobileSceneQuery = window.matchMedia("(max-width: 980px)");
 
-if (pageLoader) {
+const loaderSeenKey = "namana-loader-seen";
+const navigationEntry = performance.getEntriesByType("navigation")[0];
+const navigationType = navigationEntry ? navigationEntry.type : "navigate";
+const isSameSiteReferrer = () => {
+  if (!document.referrer) {
+    return false;
+  }
+
+  try {
+    const referrer = new URL(document.referrer);
+    const current = new URL(window.location.href);
+
+    if (current.protocol === "file:" && referrer.protocol === "file:") {
+      const currentFolder = current.pathname.slice(0, current.pathname.lastIndexOf("/") + 1);
+      const referrerFolder = referrer.pathname.slice(0, referrer.pathname.lastIndexOf("/") + 1);
+
+      return currentFolder === referrerFolder;
+    }
+
+    return referrer.origin === current.origin;
+  } catch (error) {
+    return false;
+  }
+};
+const shouldShowPageLoader = () => {
+  if (!pageLoader || navigationType === "reload" || navigationType === "back_forward") {
+    return false;
+  }
+
+  return !isSameSiteReferrer();
+};
+const showPageLoader = shouldShowPageLoader();
+
+if (pageLoader && showPageLoader) {
   document.body.classList.add("is-loading");
+  try {
+    sessionStorage.setItem(loaderSeenKey, "true");
+  } catch (error) {
+    // Storage can be blocked in private modes; the navigation checks still keep refresh/internal moves quiet.
+  }
+} else if (pageLoader) {
+  pageLoader.classList.add("is-skipped");
+  pageLoader.remove();
 }
 
 const runPageLoader = () => {
@@ -150,7 +191,7 @@ const updateHeader = () => {
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
-if (pageLoader) {
+if (pageLoader && showPageLoader) {
   if (document.readyState === "complete") {
     runPageLoader();
   } else {
