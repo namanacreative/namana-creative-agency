@@ -269,6 +269,7 @@ a {
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  transition: opacity 180ms ease, filter 180ms ease;
 }
 
 .brand-logo {
@@ -279,7 +280,7 @@ a {
   object-fit: contain;
   object-position: left center;
   display: block;
-  transition: opacity 180ms ease;
+  transition: opacity 180ms ease, filter 180ms ease;
 }
 
 .brand-logo-color {
@@ -1880,39 +1881,39 @@ button {
   }
 
   .project-folders {
-    min-height: clamp(520px, 86vh, 680px);
+    min-height: clamp(620px, 96vh, 760px);
   }
 
   .folder-stack {
     width: min(460px, calc(100vw - 20px));
-    height: clamp(440px, 112vw, 560px);
+    height: clamp(540px, 136vw, 660px);
   }
 
   .folder-card {
-    width: clamp(250px, 78vw, 360px);
+    width: clamp(238px, 72vw, 330px);
   }
 
   .folder-card-compro {
-    --folder-x: clamp(-48px, -10vw, -34px);
+    --folder-x: clamp(-18px, -3vw, -10px);
     --folder-y: 0%;
     --folder-s: 0.76;
   }
 
   .folder-card-branding {
-    --folder-x: clamp(62px, 15vw, 88px);
-    --folder-y: 12%;
+    --folder-x: clamp(10px, 3vw, 18px);
+    --folder-y: 21%;
     --folder-s: 0.78;
   }
 
   .folder-card-photography {
-    --folder-x: clamp(-92px, -21vw, -68px);
-    --folder-y: 28%;
+    --folder-x: clamp(-20px, -4vw, -12px);
+    --folder-y: 42%;
     --folder-s: 0.82;
   }
 
   .folder-card-social {
-    --folder-x: clamp(8px, 3vw, 18px);
-    --folder-y: 44%;
+    --folder-x: clamp(4px, 2vw, 12px);
+    --folder-y: 60%;
     --folder-s: 0.9;
   }
 
@@ -1982,9 +1983,18 @@ button {
   }
 
   .site-header.is-menu-open .brand {
-    opacity: 0.28;
-    filter: blur(5px);
-    transition: opacity 220ms ease, filter 220ms ease;
+    z-index: 34;
+    opacity: 1;
+    filter: none;
+  }
+
+  .site-header.is-menu-open .brand-logo-white {
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(8%) sepia(39%) saturate(1282%) hue-rotate(56deg) brightness(86%) contrast(112%);
+  }
+
+  .site-header.is-menu-open .brand-logo-color {
+    opacity: 0;
   }
 
   .nav-links a {
@@ -2253,31 +2263,31 @@ button {
   }
 
   .project-folders {
-    min-height: 560px;
+    min-height: 640px;
   }
 
   .folder-stack {
-    height: 480px;
+    height: 580px;
   }
 
   .folder-card {
-    width: 300px;
+    width: 286px;
   }
 
   .folder-card-compro {
-    --folder-x: -38px;
+    --folder-x: -10px;
   }
 
   .folder-card-branding {
-    --folder-x: 70px;
+    --folder-x: 12px;
   }
 
   .folder-card-photography {
-    --folder-x: -72px;
+    --folder-x: -14px;
   }
 
   .folder-card-social {
-    --folder-x: 10px;
+    --folder-x: 8px;
   }
 
   .brand {
