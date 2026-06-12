@@ -881,30 +881,6 @@ h2 {
   isolation: isolate;
 }
 
-.project-folders::before,
-.project-folders::after,
-.services::after,
-.approach::after,
-.contact::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  left: 0;
-  z-index: 0;
-  height: clamp(72px, 10vw, 150px);
-  pointer-events: none;
-}
-
-.project-folders::before {
-  top: 0;
-  background: linear-gradient(to bottom, #fc3d9d 0%, rgba(252, 61, 157, 0) 100%);
-}
-
-.project-folders::after {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(7, 27, 119, 0.94) 0%, rgba(7, 27, 119, 0) 100%);
-}
-
 .folder-stack,
 .services > *,
 .approach > *,
@@ -1003,9 +979,11 @@ h2 {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  margin-top: -1px;
   background:
     linear-gradient(rgba(7, 27, 119, 0.08), rgba(7, 27, 119, 0.08)),
-    url("assets/services-background.png") center / cover no-repeat;
+    url("assets/services-background.png") center / cover repeat-y;
+  background-size: auto, 100% auto;
   color: #fff;
 }
 
@@ -1018,11 +996,6 @@ h2 {
   background:
     radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.08), transparent 30%),
     linear-gradient(to bottom, rgba(0, 7, 54, 0.06), rgba(0, 7, 54, 0.26));
-}
-
-.services::after {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(7, 27, 119, 0.82) 0%, rgba(7, 27, 119, 0) 100%);
 }
 
 .section-heading {
@@ -1100,9 +1073,11 @@ h3 {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  margin-top: -1px;
   background:
     linear-gradient(rgba(7, 27, 119, 0.08), rgba(7, 27, 119, 0.08)),
-    url("assets/services-background.png") center / cover no-repeat;
+    url("assets/services-background.png") center / cover repeat-y;
+  background-size: auto, 100% auto;
   color: #fff;
 }
 
@@ -1115,11 +1090,6 @@ h3 {
   background:
     radial-gradient(circle at 80% 16%, rgba(159, 244, 212, 0.12), transparent 30%),
     linear-gradient(to bottom, rgba(0, 7, 54, 0.05), rgba(0, 7, 54, 0.28));
-}
-
-.approach::after {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(4, 15, 58, 0.88) 0%, rgba(4, 15, 58, 0) 100%);
 }
 
 .approach .section-kicker,
@@ -1179,6 +1149,7 @@ h3 {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  margin-top: -1px;
   display: grid;
   grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1fr);
   gap: clamp(32px, 7vw, 96px);
@@ -1187,11 +1158,6 @@ h3 {
     linear-gradient(rgba(4, 15, 58, 0.16), rgba(4, 15, 58, 0.24)),
     url("assets/contact-background.png") center / cover no-repeat;
   color: #fff;
-}
-
-.contact::before {
-  top: 0;
-  background: linear-gradient(to bottom, rgba(7, 27, 119, 0.76) 0%, rgba(7, 27, 119, 0) 100%);
 }
 
 .contact .section-kicker,
