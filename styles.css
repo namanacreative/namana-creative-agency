@@ -968,8 +968,24 @@ h2 {
 }
 
 .services {
-  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(rgba(7, 27, 119, 0.08), rgba(7, 27, 119, 0.08)),
+    url("assets/services-background.png") center / cover no-repeat;
   color: #fff;
+}
+
+.services::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.08), transparent 30%),
+    linear-gradient(to bottom, rgba(0, 7, 54, 0.06), rgba(0, 7, 54, 0.26));
 }
 
 .section-heading {
@@ -981,7 +997,13 @@ h2 {
 }
 
 .services .section-kicker {
-  color: #f0c46e;
+  color: #9ff4d4;
+}
+
+.services h2,
+.services h3,
+.services p {
+  color: #fff;
 }
 
 .service-grid {
@@ -991,12 +1013,18 @@ h2 {
 .service-grid article {
   min-height: 310px;
   padding: 28px;
-  background: #242321;
-  border-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 22px 54px rgba(0, 13, 76, 0.22);
+  backdrop-filter: blur(22px) saturate(1.28);
+  -webkit-backdrop-filter: blur(22px) saturate(1.28);
 }
 
 .service-number {
-  color: #f0c46e;
+  color: #9ff4d4;
   font-weight: 800;
 }
 
