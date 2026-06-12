@@ -7,7 +7,7 @@ const typeStrong = document.querySelector("[data-type-strong]");
 const typeCaret = document.querySelector("[data-type-caret]");
 const textRevealItems = Array.from(
   document.querySelectorAll(
-    "main h1, main h2, main h3, main p, main .section-kicker, main .service-number, main .service-grid span, main .timeline span, main .about-values span, main .contact-form label span, footer span"
+    "main h1, main h2, main h3, main p, main .section-kicker, main .service-number, main .service-grid span, main .timeline span, main .about-values span, main .contact-form label span"
   )
 ).filter((item) => !item.closest(".hero, .how-work, .project-folders"));
 const objectRevealItems = Array.from(
