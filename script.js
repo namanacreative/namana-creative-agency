@@ -19,6 +19,7 @@ const howWork = document.querySelector("[data-how-work]");
 const howWorkScene = document.querySelector(".how-work-scene");
 const menuToggle = document.querySelector("[data-menu-toggle]");
 const navLinks = document.querySelector("[data-nav-links]");
+const navItems = navLinks ? Array.from(navLinks.querySelectorAll("[data-nav-item]")) : [];
 const navCtas = document.querySelectorAll(".nav-cta");
 const form = document.querySelector(".contact-form");
 const note = document.querySelector("[data-form-note]");
@@ -188,8 +189,54 @@ const updateHeader = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 24);
 };
 
+let currentNavKey = "";
+
+const setActiveNav = (key) => {
+  if (!navItems.length || key === currentNavKey) {
+    return;
+  }
+
+  currentNavKey = key;
+  navItems.forEach((item) => {
+    item.classList.toggle("is-active", item.dataset.navItem === key);
+  });
+};
+
+const updateActiveNav = () => {
+  if (!navItems.length) {
+    return;
+  }
+
+  if (document.body.classList.contains("page-about")) {
+    setActiveNav("about");
+    return;
+  }
+
+  const marker = window.scrollY + Math.max(120, window.innerHeight * 0.28);
+  const workSection = document.getElementById("work");
+  const serviceSection = document.getElementById("services");
+
+  let activeKey = "home";
+
+  if (workSection && marker >= workSection.offsetTop) {
+    activeKey = "work";
+  }
+
+  if (serviceSection && marker >= serviceSection.offsetTop) {
+    activeKey = "service";
+  }
+
+  setActiveNav(activeKey);
+};
+
 updateHeader();
+updateActiveNav();
 window.addEventListener("scroll", updateHeader, { passive: true });
+window.addEventListener("scroll", updateActiveNav, { passive: true });
+window.addEventListener("resize", updateActiveNav);
+window.addEventListener("hashchange", () => {
+  window.setTimeout(updateActiveNav, 80);
+});
 
 if (pageLoader && showPageLoader) {
   if (document.readyState === "complete") {

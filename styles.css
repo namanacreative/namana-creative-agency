@@ -302,6 +302,43 @@ a {
   font-weight: 600;
 }
 
+.nav-links a:not(.nav-cta) {
+  position: relative;
+}
+
+.nav-links a:not(.nav-cta)::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -13px;
+  width: 78px;
+  height: 18px;
+  background: #9ff4d4;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: left center;
+  -webkit-mask: url("assets/nav-brush-underline.png") center / 100% 100% no-repeat;
+  mask: url("assets/nav-brush-underline.png") center / 100% 100% no-repeat;
+}
+
+.nav-links a.is-active:not(.nav-cta)::before {
+  opacity: 1;
+  animation: brushUnderline 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes brushUnderline {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-50%) scaleX(0.88);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
 .mobile-menu-toggle {
   display: none;
 }
