@@ -215,8 +215,14 @@ const updateActiveNav = () => {
   const marker = window.scrollY + Math.max(120, window.innerHeight * 0.28);
   const workSection = document.getElementById("work");
   const serviceSection = document.getElementById("services");
+  const homeLimit = Math.max(120, window.innerHeight * 0.45);
 
   let activeKey = "home";
+
+  if (window.scrollY < homeLimit) {
+    setActiveNav(activeKey);
+    return;
+  }
 
   if (workSection && marker >= workSection.offsetTop) {
     activeKey = "work";
@@ -234,6 +240,7 @@ updateActiveNav();
 window.addEventListener("scroll", updateHeader, { passive: true });
 window.addEventListener("scroll", updateActiveNav, { passive: true });
 window.addEventListener("resize", updateActiveNav);
+window.addEventListener("load", updateActiveNav, { once: true });
 window.addEventListener("hashchange", () => {
   window.setTimeout(updateActiveNav, 80);
 });
@@ -296,7 +303,7 @@ const blockMenuScrollKeys = (event) => {
   }
 };
 
-const setMenuOpen = (isOpen) => {
+const setMenuOpen = (isOpen, options = {}) => {
   if (!menuToggle || !navLinks) {
     return;
   }
@@ -329,7 +336,11 @@ const setMenuOpen = (isOpen) => {
     header.classList.add("is-scrolled");
     restoreMenuScroll();
   } else {
-    unlockPageScroll();
+    if (!options.skipRestore) {
+      unlockPageScroll();
+    } else {
+      updateHeader();
+    }
     updateHowWork();
   }
 };
@@ -341,7 +352,7 @@ if (menuToggle && navLinks) {
 
   navLinks.addEventListener("click", (event) => {
     if (event.target.closest("a")) {
-      setMenuOpen(false);
+      setMenuOpen(false, { skipRestore: true });
     }
   });
 

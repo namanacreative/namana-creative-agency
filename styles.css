@@ -304,6 +304,7 @@ a {
 
 .nav-links a:not(.nav-cta) {
   position: relative;
+  z-index: 0;
 }
 
 .nav-links a:not(.nav-cta)::before {
@@ -316,6 +317,7 @@ a {
   background: #9ff4d4;
   opacity: 0;
   pointer-events: none;
+  z-index: -1;
   transform: translateX(-50%) scaleX(0);
   transform-origin: left center;
   -webkit-mask: url("assets/nav-brush-underline.png") center / 100% 100% no-repeat;
@@ -2062,6 +2064,12 @@ button {
     opacity: 0;
     transform: translateY(16px);
     transition: opacity 240ms ease, transform 340ms cubic-bezier(0.16, 1, 0.3, 1), background 180ms ease;
+  }
+
+  .nav-links a:not(.nav-cta)::before {
+    bottom: 6px;
+    width: min(132px, 34vw);
+    height: 24px;
   }
 
   .nav-links a:hover {
