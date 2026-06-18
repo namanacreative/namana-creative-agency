@@ -190,6 +190,13 @@ const updateHeader = () => {
 };
 
 let currentNavKey = "";
+let navClickOverrideUntil = 0;
+
+const navHashMap = {
+  "#top": "home",
+  "#services": "service",
+  "#work": "work",
+};
 
 const setActiveNav = (key) => {
   if (!navItems.length || key === currentNavKey) {
@@ -212,7 +219,15 @@ const updateActiveNav = () => {
     return;
   }
 
-  const marker = window.scrollY + Math.max(120, window.innerHeight * 0.28);
+  if (window.location.hash && Date.now() < navClickOverrideUntil) {
+    const hashKey = navHashMap[window.location.hash];
+    if (hashKey) {
+      setActiveNav(hashKey);
+      return;
+    }
+  }
+
+  const marker = window.scrollY + Math.max(72, window.innerHeight * 0.16);
   const workSection = document.getElementById("work");
   const serviceSection = document.getElementById("services");
   const homeLimit = Math.max(120, window.innerHeight * 0.45);
@@ -242,6 +257,12 @@ window.addEventListener("scroll", updateActiveNav, { passive: true });
 window.addEventListener("resize", updateActiveNav);
 window.addEventListener("load", updateActiveNav, { once: true });
 window.addEventListener("hashchange", () => {
+  const hashKey = navHashMap[window.location.hash];
+  if (hashKey) {
+    navClickOverrideUntil = Date.now() + 900;
+    setActiveNav(hashKey);
+  }
+
   window.setTimeout(updateActiveNav, 80);
 });
 
@@ -351,7 +372,13 @@ if (menuToggle && navLinks) {
   });
 
   navLinks.addEventListener("click", (event) => {
-    if (event.target.closest("a")) {
+    const link = event.target.closest("a");
+    if (link) {
+      if (link.dataset.navItem && link.hash && navHashMap[link.hash]) {
+        navClickOverrideUntil = Date.now() + 900;
+        setActiveNav(link.dataset.navItem);
+      }
+
       setMenuOpen(false, { skipRestore: true });
     }
   });
