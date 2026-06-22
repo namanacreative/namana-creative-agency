@@ -930,12 +930,71 @@ h2 {
 
 .project-folders {
   position: relative;
-  min-height: clamp(560px, 82vh, 860px);
+  min-height: clamp(900px, 118vh, 1220px);
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  padding: clamp(44px, 7vw, 92px) clamp(18px, 5vw, 72px);
+  padding: clamp(76px, 9vw, 132px) clamp(18px, 5vw, 72px) clamp(54px, 7vw, 92px);
   background: transparent;
+}
+
+.project-folders-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1440px, 100%);
+  margin-inline: auto;
+}
+
+.project-folders-heading {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.42fr) minmax(420px, 1fr);
+  gap: clamp(30px, 8vw, 128px);
+  align-items: end;
+  color: #fff;
+}
+
+.project-folders-heading .section-kicker {
+  color: #9ff4d4;
+}
+
+.project-folders-count {
+  max-width: 180px;
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.project-folders-heading h2 {
+  max-width: 900px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.8rem, 5.5vw, 6.3rem);
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.project-folders-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.62);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.project-folders-link img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  filter: invert(1);
+  transition: transform 180ms ease;
+}
+
+.project-folders-link:hover img {
+  transform: translate(3px, -3px);
 }
 
 .folder-stack,
@@ -950,6 +1009,7 @@ h2 {
   position: relative;
   width: min(1180px, 96vw);
   height: clamp(430px, 58vw, 640px);
+  margin: clamp(30px, 3vw, 52px) auto 0;
 }
 
 .folder-card {
@@ -1030,6 +1090,40 @@ h2 {
   --folder-hover-x: 8px;
   --folder-hover-r: 1.5deg;
   z-index: 5;
+}
+
+.project-folder-index {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: clamp(8px, 2vw, 28px);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.project-folder-index a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 62px;
+  padding: 0 18px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.project-folder-index a + a {
+  border-left: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.project-folder-index span {
+  color: #9ff4d4;
+  font-size: 0.75rem;
+}
+
+.project-folder-index a:hover {
+  background: rgba(159, 244, 212, 0.12);
+  color: #fff;
 }
 
 .services {
@@ -2691,6 +2785,32 @@ button {
 }
 
 @media (max-width: 980px) {
+  .project-folders {
+    min-height: 0;
+    padding: 76px 20px 54px;
+  }
+
+  .project-folders-heading {
+    grid-template-columns: minmax(150px, 0.34fr) minmax(360px, 1fr);
+    gap: 42px;
+  }
+
+  .project-folders-heading h2 {
+    font-size: clamp(2.6rem, 7vw, 4.8rem);
+  }
+
+  .project-folder-index {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .project-folder-index a:nth-child(3) {
+    border-left: 0;
+  }
+
+  .project-folder-index a:nth-child(n + 3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.24);
+  }
+
   .inner-page-hero {
     min-height: max(680px, 88svh);
   }
@@ -2732,6 +2852,42 @@ button {
 }
 
 @media (max-width: 760px) {
+  .project-folders {
+    min-height: 0;
+    padding: 70px 16px 46px;
+  }
+
+  .project-folders-heading {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .project-folders-count {
+    max-width: none;
+  }
+
+  .project-folders-heading h2 {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+
+  .project-folders-link {
+    margin-top: 22px;
+  }
+
+  .folder-stack {
+    margin-top: 34px;
+  }
+
+  .project-folder-index {
+    margin-top: 20px;
+  }
+
+  .project-folder-index a {
+    min-height: 56px;
+    padding-inline: 12px;
+    font-size: 0.8rem;
+  }
+
   .inner-page-hero {
     min-height: max(620px, 100svh);
     padding: 112px 20px 58px;

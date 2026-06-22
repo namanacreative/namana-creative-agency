@@ -18,7 +18,7 @@
     <style>
       .page-loader{--loader-fill:0%;position:fixed;inset:0;z-index:100;display:grid;place-items:center;align-content:center;gap:22px;background:#050505;color:#fff}.loader-logo{position:relative;width:min(58vw,62vh,600px);aspect-ratio:1}.loader-logo-fill-mask{position:absolute;inset:0;-webkit-mask-image:linear-gradient(to top,#000 0 var(--loader-fill),transparent var(--loader-fill) 100%);mask-image:linear-gradient(to top,#000 0 var(--loader-fill),transparent var(--loader-fill) 100%)}.loader-logo-stack{position:absolute;inset:15%;clip-path:inset(var(--work-logo-crop-top,0%) var(--work-logo-crop-right,0%) var(--work-logo-crop-bottom,0%) var(--work-logo-crop-left,0%));transform:translate3d(var(--work-logo-visible-x,0%),var(--work-logo-visible-y,0%),0) rotate(var(--work-logo-rotate,0deg)) rotateY(var(--work-logo-flip-y,0deg)) scale(var(--work-logo-scale,1));transform-origin:50% 50%}.loader-logo-stack-base{filter:brightness(0) invert(.18)}.loader-logo-stack-fill{filter:brightness(0) invert(1)}.loader-logo-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.loader-progress{margin:0;font-family:"Bricolage Grotesque",Urbanist,sans-serif;font-weight:800}
     </style>
-    <link rel="stylesheet" href="styles.css?v=reference-pages-1">
+    <link rel="stylesheet" href="styles.css?v=index-work-2">
   </head>
   <body class="page-home">
     <div class="page-loader" data-page-loader aria-label="Loading Namana website">
@@ -97,19 +97,42 @@
 
       <div class="work-background-run">
         <section class="project-folders reveal" id="work" aria-label="Our project folders">
-          <div class="folder-stack">
-            <button class="folder-card folder-card-compro" type="button" aria-label="Company profile projects">
-              <img src="assets/belief-folder-compro.png" alt="">
-            </button>
-            <button class="folder-card folder-card-branding" type="button" aria-label="Branding projects">
-              <img src="assets/belief-folder-branding.png" alt="">
-            </button>
-            <button class="folder-card folder-card-photography" type="button" aria-label="Photography projects">
-              <img src="assets/belief-folder-photography.png" alt="">
-            </button>
-            <button class="folder-card folder-card-social" type="button" aria-label="Social media projects">
-              <img src="assets/belief-folder-social-media.png" alt="">
-            </button>
+          <div class="project-folders-shell">
+            <header class="project-folders-heading">
+              <div>
+                <p class="section-kicker">Selected work</p>
+                <p class="project-folders-count">Four creative directions / 2026</p>
+              </div>
+              <div>
+                <h2>Ideas filed by the way they move brands.</h2>
+                <a class="project-folders-link" href="works.html">
+                  <span>VIEW ALL WORK</span>
+                  <img src="assets/arrow.png" alt="" aria-hidden="true">
+                </a>
+              </div>
+            </header>
+
+            <div class="folder-stack" aria-label="Browse work by category">
+              <a class="folder-card folder-card-compro" href="works.html#company-profile" aria-label="View company profile projects">
+                <img src="assets/belief-folder-compro.png" alt="Company profile project folder">
+              </a>
+              <a class="folder-card folder-card-branding" href="works.html#branding" aria-label="View branding projects">
+                <img src="assets/belief-folder-branding.png" alt="Branding project folder">
+              </a>
+              <a class="folder-card folder-card-photography" href="works.html#photography" aria-label="View photography projects">
+                <img src="assets/belief-folder-photography.png" alt="Photography project folder">
+              </a>
+              <a class="folder-card folder-card-social" href="works.html#social-media" aria-label="View social media projects">
+                <img src="assets/belief-folder-social-media.png" alt="Social media project folder">
+              </a>
+            </div>
+
+            <div class="project-folder-index" aria-label="Work categories">
+              <a href="works.html#branding"><span>01</span>Branding</a>
+              <a href="works.html#social-media"><span>02</span>Social Media</a>
+              <a href="works.html#photography"><span>03</span>Photography</a>
+              <a href="works.html#company-profile"><span>04</span>Company Profile</a>
+            </div>
           </div>
         </section>
 
@@ -204,6 +227,6 @@
       <span>namanacreative@gmail.com / @namanacreative</span>
     </footer>
 
-    <script src="script.js?v=reference-pages-1"></script>
+    <script src="script.js?v=index-work-2"></script>
   </body>
 </html>
