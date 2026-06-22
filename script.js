@@ -12,7 +12,7 @@ const textRevealItems = Array.from(
 ).filter((item) => !item.closest(".hero, .how-work, .project-folders"));
 const objectRevealItems = Array.from(
   document.querySelectorAll(
-    ".intro-content, .intro-cta, .service-grid article, .timeline article, .contact-form, .folder-card img, .about-hero-content, .about-values article"
+    ".intro-content, .intro-cta, .service-grid article, .timeline article, .contact-form, .folder-card img, .about-hero-content, .about-values article, .inner-page-hero-content, .service-offer-card, .engagement-step, .work-case, .reference-note, .page-cta"
   )
 ).filter((item) => !item.closest(".hero, .how-work"));
 const howWork = document.querySelector("[data-how-work]");
@@ -214,8 +214,23 @@ const updateActiveNav = () => {
     return;
   }
 
+  if (document.body.classList.contains("page-services")) {
+    setActiveNav("service");
+    return;
+  }
+
+  if (document.body.classList.contains("page-works")) {
+    setActiveNav("work");
+    return;
+  }
+
   if (document.body.classList.contains("page-about")) {
     setActiveNav("about");
+    return;
+  }
+
+  if (document.body.classList.contains("page-home")) {
+    setActiveNav("home");
     return;
   }
 
