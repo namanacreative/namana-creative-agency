@@ -1007,16 +1007,17 @@ h2 {
 
 .folder-stack {
   position: relative;
-  width: min(1180px, 96vw);
-  height: clamp(430px, 58vw, 640px);
+  width: min(1120px, 94vw);
+  height: clamp(540px, 54vw, 660px);
   margin: clamp(30px, 3vw, 52px) auto 0;
 }
 
 .folder-card {
   position: absolute;
+  top: var(--folder-top);
   left: 50%;
   display: block;
-  width: clamp(310px, 39vw, 560px);
+  width: clamp(300px, 34vw, 500px);
   min-height: 0;
   padding: 0;
   border: 0;
@@ -1024,7 +1025,7 @@ h2 {
   background: transparent;
   cursor: pointer;
   filter: drop-shadow(0 26px 32px rgba(0, 11, 60, 0.2));
-  transform: translate3d(calc(-50% + var(--folder-x)), var(--folder-y), 0) rotate(var(--folder-r)) scale(var(--folder-s));
+  transform: translate3d(calc(-50% + var(--folder-x)), 0, 0) rotate(var(--folder-r)) scale(var(--folder-s));
   transform-origin: 50% 82%;
   transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1), filter 260ms ease, z-index 0s linear 160ms;
   will-change: transform;
@@ -1041,7 +1042,7 @@ h2 {
 .folder-card:focus-visible {
   filter: drop-shadow(0 34px 42px rgba(0, 11, 60, 0.3)) saturate(1.08);
   transform:
-    translate3d(calc(-50% + var(--folder-x) + var(--folder-hover-x)), calc(var(--folder-y) - 22px), 0)
+    translate3d(calc(-50% + var(--folder-x) + var(--folder-hover-x)), -18px, 0)
     rotate(calc(var(--folder-r) + var(--folder-hover-r)))
     scale(calc(var(--folder-s) + 0.035));
   transition-delay: 0s;
@@ -1053,40 +1054,40 @@ h2 {
 }
 
 .folder-card-compro {
-  --folder-x: clamp(-112px, -7vw, -78px);
-  --folder-y: 0%;
-  --folder-r: -3deg;
-  --folder-s: 0.92;
+  --folder-x: clamp(-210px, -13vw, -150px);
+  --folder-top: 0%;
+  --folder-r: -2deg;
+  --folder-s: 0.86;
   --folder-hover-x: -12px;
   --folder-hover-r: -2deg;
   z-index: 2;
 }
 
 .folder-card-branding {
-  --folder-x: clamp(210px, 16vw, 292px);
-  --folder-y: 6%;
-  --folder-r: 2.5deg;
-  --folder-s: 0.92;
+  --folder-x: clamp(150px, 13vw, 210px);
+  --folder-top: 3%;
+  --folder-r: 2deg;
+  --folder-s: 0.86;
   --folder-hover-x: 14px;
   --folder-hover-r: 2deg;
   z-index: 3;
 }
 
 .folder-card-photography {
-  --folder-x: clamp(-292px, -16vw, -210px);
-  --folder-y: 24%;
-  --folder-r: -1.5deg;
-  --folder-s: 0.93;
+  --folder-x: clamp(-190px, -11vw, -128px);
+  --folder-top: 36%;
+  --folder-r: -1deg;
+  --folder-s: 0.9;
   --folder-hover-x: -16px;
   --folder-hover-r: -1.8deg;
   z-index: 4;
 }
 
 .folder-card-social {
-  --folder-x: clamp(28px, 4vw, 68px);
-  --folder-y: 33%;
+  --folder-x: clamp(128px, 11vw, 190px);
+  --folder-top: 38%;
   --folder-r: 1deg;
-  --folder-s: 1;
+  --folder-s: 0.9;
   --folder-hover-x: 8px;
   --folder-hover-r: 1.5deg;
   z-index: 5;
@@ -2167,7 +2168,7 @@ button {
 
   .folder-stack {
     width: min(760px, 100vw);
-    height: clamp(400px, 80vw, 560px);
+    height: clamp(500px, 76vw, 590px);
   }
 
   .folder-card {
@@ -2175,23 +2176,23 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: clamp(-82px, -8vw, -54px);
-    --folder-y: 0%;
+    --folder-x: clamp(-142px, -14vw, -104px);
+    --folder-top: 0%;
   }
 
   .folder-card-branding {
-    --folder-x: clamp(128px, 18vw, 202px);
-    --folder-y: 8%;
+    --folder-x: clamp(104px, 14vw, 142px);
+    --folder-top: 3%;
   }
 
   .folder-card-photography {
-    --folder-x: clamp(-202px, -20vw, -128px);
-    --folder-y: 28%;
+    --folder-x: clamp(-132px, -12vw, -90px);
+    --folder-top: 38%;
   }
 
   .folder-card-social {
-    --folder-x: clamp(10px, 5vw, 46px);
-    --folder-y: 36%;
+    --folder-x: clamp(90px, 12vw, 132px);
+    --folder-top: 40%;
   }
 
   .how-work {
@@ -2323,7 +2324,7 @@ button {
 
   .folder-stack {
     width: min(460px, calc(100vw - 20px));
-    height: clamp(540px, 136vw, 660px);
+    height: clamp(660px, 168vw, 780px);
   }
 
   .folder-card {
@@ -2331,27 +2332,27 @@ button {
   }
 
   .folder-card-compro {
-    --folder-x: clamp(-18px, -3vw, -10px);
-    --folder-y: 0%;
-    --folder-s: 0.76;
-  }
-
-  .folder-card-branding {
-    --folder-x: clamp(10px, 3vw, 18px);
-    --folder-y: 21%;
-    --folder-s: 0.78;
-  }
-
-  .folder-card-photography {
-    --folder-x: clamp(-20px, -4vw, -12px);
-    --folder-y: 42%;
+    --folder-x: clamp(-14px, -2vw, -8px);
+    --folder-top: 0%;
     --folder-s: 0.82;
   }
 
+  .folder-card-branding {
+    --folder-x: clamp(8px, 2vw, 14px);
+    --folder-top: 22%;
+    --folder-s: 0.82;
+  }
+
+  .folder-card-photography {
+    --folder-x: clamp(-14px, -2vw, -8px);
+    --folder-top: 44%;
+    --folder-s: 0.84;
+  }
+
   .folder-card-social {
-    --folder-x: clamp(4px, 2vw, 12px);
-    --folder-y: 60%;
-    --folder-s: 0.9;
+    --folder-x: clamp(8px, 2vw, 14px);
+    --folder-top: 66%;
+    --folder-s: 0.84;
   }
 
   .site-header {
@@ -2973,5 +2974,11 @@ button {
 
   .page-cta .intro-cta {
     margin-top: 32px;
+  }
+}
+
+@media (max-width: 420px) {
+  .folder-stack {
+    height: 720px;
   }
 }
