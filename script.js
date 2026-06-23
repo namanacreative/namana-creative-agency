@@ -78,7 +78,7 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const cycleDuration = prefersReducedMotion ? 700 : 6800;
+  const cycleDuration = prefersReducedMotion ? 700 : 9200;
   const start = performance.now();
   const loaderStatuses = [
     { at: 0, text: "Finding the purpose" },
@@ -91,16 +91,16 @@ const runPageLoader = () => {
   let activeLoaderStatus = loaderStatuses[0].text;
   const loaderSegments = [
     { type: "hold", units: 0.85, scene: 0 },
-    { type: "move", units: 2.25, from: 0.10, to: 0.18 },
-    { type: "hold", units: 1.05, scene: 0.18 },
-    { type: "move", units: 2.25, from: 0.27, to: 0.56 },
-    { type: "hold", units: 1.05, scene: 0.56 },
+    { type: "move", units: 1.85, from: 0.10, to: 0.18 },
+    { type: "hold", units: 0.72, scene: 0.18 },
+    { type: "move", units: 2.15, from: 0.27, to: 0.56 },
+    { type: "hold", units: 0.72, scene: 0.56 },
     { type: "move", units: 2.25, from: 0.68, to: 0.87 },
-    { type: "hold", units: 1.05, scene: 0.87 },
-    { type: "move", units: 2.25, from: 0.925, to: 0.995 },
-    { type: "hold", units: 0.85, scene: 0.995 },
-    { type: "return", units: 2.5, from: 0.995, to: 0 },
-    { type: "hold", units: 0.55, scene: 0 },
+    { type: "hold", units: 0.72, scene: 0.87 },
+    { type: "move", units: 1.95, from: 0.925, to: 0.995 },
+    { type: "hold", units: 0.72, scene: 0.995 },
+    { type: "return", units: 2.35, from: 0.995, to: 0 },
+    { type: "hold", units: 0.42, scene: 0 },
   ];
   const loaderUnits = loaderSegments.reduce((total, segment) => total + segment.units, 0);
   const lerp = (startValue, endValue, value) => startValue + (endValue - startValue) * value;
@@ -130,28 +130,54 @@ const runPageLoader = () => {
       const endAt = (cursor + segment.units) / loaderUnits;
 
       if (value <= endAt) {
+        const localProgress = clamp(
+          (value - startAt) / Math.max(endAt - startAt, 0.001),
+          0,
+          1
+        );
+
         if (segment.type === "hold") {
-          return getHowWorkLogoState(segment.scene);
+          return {
+            state: getHowWorkLogoState(segment.scene),
+            lock: Math.sin(localProgress * Math.PI) ** 2,
+            motion: 0,
+          };
         }
 
-        const localProgress = (value - startAt) / Math.max(endAt - startAt, 0.001);
-        const easedProgress = easeInOutCubic(clamp(localProgress, 0, 1));
+        const easedProgress =
+          localProgress ** 3 *
+          (localProgress * (localProgress * 6 - 15) + 10);
+        const motion = Math.sin(localProgress * Math.PI);
 
         if (segment.type === "return") {
-          return interpolateLogoState(
-            getHowWorkLogoState(segment.from),
-            getHowWorkLogoState(segment.to),
-            easedProgress
-          );
+          return {
+            state: interpolateLogoState(
+              getHowWorkLogoState(segment.from),
+              getHowWorkLogoState(segment.to),
+              easedProgress
+            ),
+            lock: 0,
+            motion,
+          };
         }
 
-        return getHowWorkLogoState(segment.from + (segment.to - segment.from) * easedProgress);
+        return {
+          state: getHowWorkLogoState(
+            segment.from + (segment.to - segment.from) * easedProgress
+          ),
+          lock: 0,
+          motion,
+        };
       }
 
       cursor += segment.units;
     }
 
-    return getHowWorkLogoState(loaderSegments[loaderSegments.length - 1].scene);
+    return {
+      state: getHowWorkLogoState(loaderSegments[loaderSegments.length - 1].scene),
+      lock: 0,
+      motion: 0,
+    };
   };
 
   if (loaderLogo) {
@@ -162,11 +188,14 @@ const runPageLoader = () => {
     const elapsed = now - start;
     const progress = Math.min(elapsed / cycleDuration, 1);
     const loopProgress = progress;
-    const logoState = readLoaderLogoState(loopProgress);
+    const loaderFrame = readLoaderLogoState(loopProgress);
+    const logoState = loaderFrame.state;
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
     pageLoader.style.setProperty("--loader-fill", `${percentage}%`);
     pageLoader.style.setProperty("--loader-progress", percentage);
+    pageLoader.style.setProperty("--loader-lock", loaderFrame.lock.toFixed(3));
+    pageLoader.style.setProperty("--loader-motion", loaderFrame.motion.toFixed(3));
     const loaderTextTone = Math.round(78 + progress * 177);
     loaderProgress.style.color = `rgb(${loaderTextTone}, ${loaderTextTone}, ${loaderTextTone})`;
 

@@ -115,6 +115,8 @@ a {
   --work-logo-size: min(58vw, 62vh, 600px);
   --loader-fill: 0%;
   --loader-progress: 0;
+  --loader-lock: 0;
+  --loader-motion: 0;
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -126,8 +128,8 @@ a {
   background:
     linear-gradient(rgba(255, 255, 255, 0.026) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px),
-    radial-gradient(circle at 20% 12%, rgba(252, 61, 157, 0.15), transparent 32%),
-    radial-gradient(circle at 78% 16%, rgba(159, 244, 212, 0.13), transparent 34%),
+    radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.055), transparent 32%),
+    radial-gradient(circle at 78% 16%, rgba(255, 255, 255, 0.04), transparent 34%),
     #050505;
   background-size: 48px 48px, 48px 48px, auto, auto, auto;
   color: #fff;
@@ -139,8 +141,8 @@ a {
   position: absolute;
   inset: 0 auto 0 0;
   width: 1px;
-  background: linear-gradient(to bottom, transparent, rgba(159, 244, 212, 0.68), transparent);
-  box-shadow: 0 0 26px rgba(159, 244, 212, 0.26);
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.48), transparent);
+  box-shadow: 0 0 26px rgba(255, 255, 255, 0.16);
   opacity: 0.55;
   animation: loaderScan 3.4s ease-in-out infinite;
 }
@@ -183,6 +185,8 @@ a {
   --work-logo-crop-right: 0%;
   --work-logo-crop-bottom: 0%;
   --work-logo-crop-left: 0%;
+  transform: scale(calc(1 + var(--loader-lock) * 0.018));
+  transition: transform 160ms ease-out;
 }
 
 .loader-logo::before,
@@ -205,8 +209,74 @@ a {
 .loader-logo::after {
   width: 48%;
   aspect-ratio: 1;
-  border: 1px dashed rgba(159, 244, 212, 0.16);
-  animation: loaderOrbit 9s linear infinite;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  opacity: calc(0.28 + var(--loader-motion) * 0.42);
+  animation: loaderOrbit 12s linear infinite;
+}
+
+.loader-registration {
+  position: absolute;
+  inset: 11%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: calc(0.18 + var(--loader-lock) * 0.72);
+  transform: scale(calc(1.08 - var(--loader-lock) * 0.08));
+  transition: opacity 160ms ease-out, transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loader-registration::before,
+.loader-registration::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, calc(0.08 + var(--loader-lock) * 0.2));
+}
+
+.loader-registration::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(calc(0.3 + var(--loader-lock) * 0.7));
+}
+
+.loader-registration::after {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  transform: scaleY(calc(0.3 + var(--loader-lock) * 0.7));
+}
+
+.loader-registration span {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-color: rgba(255, 255, 255, 0.62);
+  border-style: solid;
+}
+
+.loader-registration span:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.loader-registration span:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-width: 1px 1px 0 0;
+}
+
+.loader-registration span:nth-child(3) {
+  right: 0;
+  bottom: 0;
+  border-width: 0 1px 1px 0;
+}
+
+.loader-registration span:nth-child(4) {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1px 1px;
 }
 
 .loader-logo-fill-mask {
@@ -308,8 +378,13 @@ a {
   position: absolute;
   inset: 0 auto 0 0;
   width: calc(var(--loader-progress) * 1%);
-  background: linear-gradient(90deg, #1942b0, #fc3d9d 56%, #9ff4d4);
-  box-shadow: 0 0 14px rgba(159, 244, 212, 0.48);
+  background: linear-gradient(
+    90deg,
+    #1942b0 0 33.333%,
+    #fc3d9d 33.333% 66.666%,
+    #9ff4d4 66.666% 100%
+  );
+  box-shadow: none;
 }
 
 .loader-meta {
