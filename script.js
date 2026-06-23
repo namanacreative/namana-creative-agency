@@ -2,6 +2,7 @@ const header = document.querySelector("[data-header]");
 const hero = document.querySelector(".hero");
 const pageLoader = document.querySelector("[data-page-loader]");
 const loaderProgress = document.querySelector("[data-loader-progress]");
+const loaderStatus = document.querySelector("[data-loader-status]");
 const typePrefix = document.querySelector("[data-type-prefix]");
 const typeStrong = document.querySelector("[data-type-strong]");
 const typeCaret = document.querySelector("[data-type-caret]");
@@ -77,9 +78,17 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const duration = prefersReducedMotion ? 700 : 14000;
-  const cycleDuration = prefersReducedMotion ? 700 : 11800;
+  const cycleDuration = prefersReducedMotion ? 700 : 6800;
   const start = performance.now();
+  const loaderStatuses = [
+    { at: 0, text: "Finding the purpose" },
+    { at: 0.17, text: "Shaping the system" },
+    { at: 0.36, text: "Building the character" },
+    { at: 0.55, text: "Creating the motion" },
+    { at: 0.74, text: "Preparing the experience" },
+    { at: 0.92, text: "Ready to post" },
+  ];
+  let activeLoaderStatus = loaderStatuses[0].text;
   const loaderSegments = [
     { type: "hold", units: 0.85, scene: 0 },
     { type: "move", units: 2.25, from: 0.10, to: 0.18 },
@@ -151,14 +160,31 @@ const runPageLoader = () => {
 
   const tick = (now) => {
     const elapsed = now - start;
-    const progress = Math.min((now - start) / duration, 1);
-    const loopProgress = progress >= 1 ? 1 : (elapsed % cycleDuration) / cycleDuration;
+    const progress = Math.min(elapsed / cycleDuration, 1);
+    const loopProgress = progress;
     const logoState = readLoaderLogoState(loopProgress);
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
     pageLoader.style.setProperty("--loader-fill", `${percentage}%`);
+    pageLoader.style.setProperty("--loader-progress", percentage);
     const loaderTextTone = Math.round(78 + progress * 177);
     loaderProgress.style.color = `rgb(${loaderTextTone}, ${loaderTextTone}, ${loaderTextTone})`;
+
+    if (loaderStatus) {
+      const nextStatus = loaderStatuses.reduce(
+        (selected, status) => (progress >= status.at ? status : selected),
+        loaderStatuses[0]
+      ).text;
+
+      if (nextStatus !== activeLoaderStatus) {
+        activeLoaderStatus = nextStatus;
+        loaderStatus.classList.add("is-changing");
+        window.setTimeout(() => {
+          loaderStatus.textContent = nextStatus;
+          loaderStatus.classList.remove("is-changing");
+        }, prefersReducedMotion ? 0 : 140);
+      }
+    }
 
     if (loaderLogo) {
       applyHowWorkLogoState(loaderLogo, logoState, { colorOnly: true, minScale: true });

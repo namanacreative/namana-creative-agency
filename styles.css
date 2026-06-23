@@ -114,6 +114,7 @@ a {
 .page-loader {
   --work-logo-size: min(58vw, 62vh, 600px);
   --loader-fill: 0%;
+  --loader-progress: 0;
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -123,11 +124,33 @@ a {
   align-content: center;
   padding: 24px;
   background:
-    radial-gradient(circle at 20% 12%, rgba(252, 61, 157, 0.18), transparent 32%),
-    radial-gradient(circle at 78% 16%, rgba(159, 244, 212, 0.16), transparent 34%),
+    linear-gradient(rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+    radial-gradient(circle at 20% 12%, rgba(252, 61, 157, 0.15), transparent 32%),
+    radial-gradient(circle at 78% 16%, rgba(159, 244, 212, 0.13), transparent 34%),
     #050505;
+  background-size: 48px 48px, 48px 48px, auto, auto, auto;
   color: #fff;
   transition: opacity 520ms ease, visibility 520ms ease;
+}
+
+.page-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(159, 244, 212, 0.68), transparent);
+  box-shadow: 0 0 26px rgba(159, 244, 212, 0.26);
+  opacity: 0.55;
+  animation: loaderScan 3.4s ease-in-out infinite;
+}
+
+.page-loader::after {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
 }
 
 .page-loader.is-loaded {
@@ -160,6 +183,30 @@ a {
   --work-logo-crop-right: 0%;
   --work-logo-crop-bottom: 0%;
   --work-logo-crop-left: 0%;
+}
+
+.loader-logo::before,
+.loader-logo::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.loader-logo::before {
+  width: 72%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.loader-logo::after {
+  width: 48%;
+  aspect-ratio: 1;
+  border: 1px dashed rgba(159, 244, 212, 0.16);
+  animation: loaderOrbit 9s linear infinite;
 }
 
 .loader-logo-fill-mask {
@@ -217,7 +264,7 @@ a {
 }
 
 .loader-progress {
-  min-width: 160px;
+  min-width: 112px;
   margin: 0;
   color: #fff;
   font-family: "Bricolage Grotesque", Urbanist, sans-serif;
@@ -225,6 +272,133 @@ a {
   font-weight: 800;
   letter-spacing: 0;
   text-align: center;
+}
+
+.loader-readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: clamp(30px, 10vw, 150px);
+  width: min(560px, calc(100vw - 64px));
+}
+
+.loader-status {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.loader-status.is-changing {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.loader-track {
+  position: relative;
+  width: min(560px, calc(100vw - 64px));
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.loader-track span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--loader-progress) * 1%);
+  background: linear-gradient(90deg, #1942b0, #fc3d9d 56%, #9ff4d4);
+  box-shadow: 0 0 14px rgba(159, 244, 212, 0.48);
+}
+
+.loader-meta {
+  position: absolute;
+  left: clamp(34px, 4vw, 66px);
+  right: clamp(34px, 4vw, 66px);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.loader-meta-top {
+  top: clamp(32px, 5vh, 56px);
+}
+
+.loader-meta-bottom {
+  bottom: clamp(32px, 5vh, 56px);
+}
+
+@keyframes loaderScan {
+  0%,
+  100% {
+    left: 8%;
+    opacity: 0;
+  }
+
+  18%,
+  82% {
+    opacity: 0.55;
+  }
+
+  50% {
+    left: 92%;
+  }
+}
+
+@keyframes loaderOrbit {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .page-loader {
+    --work-logo-size: min(88vw, 48vh, 430px);
+    gap: 13px;
+    padding-inline: 20px;
+    background-size: 34px 34px, 34px 34px, auto, auto, auto;
+  }
+
+  .page-loader::after {
+    inset: 10px;
+  }
+
+  .loader-readout,
+  .loader-track {
+    width: min(420px, calc(100vw - 48px));
+  }
+
+  .loader-readout {
+    gap: 18px;
+  }
+
+  .loader-status {
+    font-size: 0.62rem;
+  }
+
+  .loader-progress {
+    min-width: 96px;
+    font-size: 0.92rem;
+  }
+
+  .loader-meta {
+    left: 24px;
+    right: 24px;
+    font-size: 0.54rem;
+  }
+
+  .loader-meta-top {
+    top: 24px;
+  }
+
+  .loader-meta-bottom {
+    bottom: 24px;
+  }
 }
 
 .site-header {
@@ -663,6 +837,8 @@ h1 strong {
   .hero::before,
   .hero::after,
   .hero-grain,
+  .page-loader::before,
+  .loader-logo::after,
   .loader-logo,
   .loader-logo-layer,
   .type-caret {
