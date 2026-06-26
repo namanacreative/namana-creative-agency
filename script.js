@@ -101,6 +101,7 @@ const runPageLoader = () => {
       : networkType === "3g"
         ? 6800
         : 8200;
+  const logoCycleDuration = prefersReducedMotion ? minDuration : 9200;
   const start = performance.now();
   let displayProgress = 0;
   let hasWindowLoaded = document.readyState === "complete";
@@ -246,7 +247,8 @@ const runPageLoader = () => {
     }
 
     const progress = clamp(displayProgress / 100, 0, 1);
-    const loopProgress = progress;
+    const logoProgress = clamp(elapsed / logoCycleDuration, 0, 1);
+    const loopProgress = prefersReducedMotion ? progress : logoProgress;
     const loaderFrame = readLoaderLogoState(loopProgress);
     const logoState = loaderFrame.state;
     const percentage = Math.round(progress * 100);
