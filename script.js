@@ -78,8 +78,43 @@ const runPageLoader = () => {
   }
 
   const loaderLogo = pageLoader.querySelector(".loader-logo");
-  const cycleDuration = prefersReducedMotion ? 700 : 9200;
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const networkType = connection?.effectiveType || "4g";
+  const downlink = Number(connection?.downlink || 0);
+  const isSaveData = Boolean(connection?.saveData);
+  const isFastConnection =
+    !isSaveData &&
+    (networkType === "4g" || networkType === "wifi" || downlink >= 8 || !connection);
+  const minDuration = prefersReducedMotion
+    ? 500
+    : isSaveData
+      ? 1100
+      : isFastConnection
+        ? 2100
+        : networkType === "3g"
+          ? 3100
+          : 4200;
+  const maxDuration = prefersReducedMotion
+    ? 900
+    : isFastConnection
+      ? 4800
+      : networkType === "3g"
+        ? 6800
+        : 8200;
   const start = performance.now();
+  let displayProgress = 0;
+  let hasWindowLoaded = document.readyState === "complete";
+  let shouldFinishLoader = false;
+
+  if (!hasWindowLoaded) {
+    window.addEventListener(
+      "load",
+      () => {
+        hasWindowLoaded = true;
+      },
+      { once: true }
+    );
+  }
   const loaderStatuses = [
     { at: 0, text: "Finding the purpose" },
     { at: 0.17, text: "Shaping the system" },
@@ -186,7 +221,31 @@ const runPageLoader = () => {
 
   const tick = (now) => {
     const elapsed = now - start;
-    const progress = Math.min(elapsed / cycleDuration, 1);
+    const timeProgress = easeOutCubic(clamp(elapsed / minDuration, 0, 1));
+    const minimumProgress = timeProgress * 82;
+    const loadedProgress = timeProgress * 94;
+    const fallbackProgress = clamp(elapsed / maxDuration, 0, 1) * 96;
+    const readinessProgress = hasWindowLoaded
+      ? loadedProgress
+      : Math.max(minimumProgress, fallbackProgress);
+    const targetProgress =
+      hasWindowLoaded && elapsed >= minDuration ? 100 : Math.min(96, readinessProgress);
+
+    displayProgress += (targetProgress - displayProgress) * (prefersReducedMotion ? 0.65 : 0.28);
+    if (targetProgress - displayProgress > 18) {
+      displayProgress = targetProgress - 18;
+    }
+
+    if (
+      (hasWindowLoaded && elapsed >= minDuration + 420) ||
+      (hasWindowLoaded && elapsed >= minDuration && displayProgress >= 99.2) ||
+      elapsed >= maxDuration
+    ) {
+      displayProgress = 100;
+      shouldFinishLoader = true;
+    }
+
+    const progress = clamp(displayProgress / 100, 0, 1);
     const loopProgress = progress;
     const loaderFrame = readLoaderLogoState(loopProgress);
     const logoState = loaderFrame.state;
@@ -219,7 +278,7 @@ const runPageLoader = () => {
       applyHowWorkLogoState(loaderLogo, logoState, { colorOnly: true, minScale: true });
     }
 
-    if (progress < 1) {
+    if (!shouldFinishLoader) {
       window.requestAnimationFrame(tick);
       return;
     }
@@ -337,11 +396,7 @@ window.addEventListener("hashchange", () => {
 });
 
 if (pageLoader && showPageLoader) {
-  if (document.readyState === "complete") {
-    runPageLoader();
-  } else {
-    window.addEventListener("load", runPageLoader, { once: true });
-  }
+  window.requestAnimationFrame(runPageLoader);
 }
 
 const updateHowWorkCanvas = () => {
@@ -648,6 +703,7 @@ if (form && note) {
 }
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const easeOutCubic = (value) => 1 - (1 - value) ** 3;
 const progressBetween = (value, start, end) => clamp((value - start) / (end - start), 0, 1);
 const smoothProgress = (value) => value * value * (3 - 2 * value);
 const easeInOutCubic = (value) =>
