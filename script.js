@@ -10,12 +10,12 @@ const textRevealItems = Array.from(
   document.querySelectorAll(
     "main h1, main h2, main h3, main p, main .section-kicker, main .service-number, main .service-grid span, main .timeline span, main .about-values span, main .contact-form label span"
   )
-).filter((item) => !item.closest(".hero, .how-work, .project-folders"));
+).filter((item) => !item.closest(".hero, .how-work, .project-folders, .service-page-cta"));
 const objectRevealItems = Array.from(
   document.querySelectorAll(
-    ".intro-content, .intro-cta, .service-grid article, .timeline article, .contact-form, .folder-card img, .project-folders-link, .project-folder-index a, .about-hero-content, .about-values article, .inner-page-hero-content, .service-offer-card, .engagement-step, .work-case, .reference-note, .page-cta"
+    ".intro-content, .intro-cta, .service-grid article, .timeline article, .contact-form, .folder-card img, .project-folders-link, .project-folder-index a, .about-hero-content, .about-values article, .work-point, .work-point-logo, .about-principle, .about-principles-note, .inner-page-hero-content, .service-offer-card, .engagement-step, .work-case, .works-project-card, .works-detail-card, .reference-note, .page-cta"
   )
-).filter((item) => !item.closest(".hero, .how-work"));
+).filter((item) => !item.closest(".hero, .how-work, .service-page-cta"));
 const howWork = document.querySelector("[data-how-work]");
 const howWorkScene = document.querySelector(".how-work-scene");
 const menuToggle = document.querySelector("[data-menu-toggle]");
@@ -117,11 +117,11 @@ const runPageLoader = () => {
     );
   }
   const loaderStatuses = [
-    { at: 0, text: "Finding the purpose" },
-    { at: 0.17, text: "Shaping the system" },
-    { at: 0.36, text: "Building the character" },
-    { at: 0.55, text: "Creating the motion" },
-    { at: 0.74, text: "Preparing the experience" },
+    { at: 0, text: "Tuning the signal" },
+    { at: 0.17, text: "Rolling the opener" },
+    { at: 0.36, text: "Mixing the colors" },
+    { at: 0.55, text: "Cueing the frame" },
+    { at: 0.74, text: "Bringing Namana on air" },
     { at: 0.92, text: "Ready to post" },
   ];
   let activeLoaderStatus = loaderStatuses[0].text;
@@ -247,9 +247,11 @@ const runPageLoader = () => {
     }
 
     const progress = clamp(displayProgress / 100, 0, 1);
-    const logoProgress = clamp(elapsed / logoCycleDuration, 0, 1);
-    const loopProgress = prefersReducedMotion ? progress : logoProgress;
-    const loaderFrame = readLoaderLogoState(loopProgress);
+    const loaderFrame = {
+      state: getHowWorkLogoState(0),
+      lock: 0,
+      motion: 0,
+    };
     const logoState = loaderFrame.state;
     const percentage = Math.round(progress * 100);
     loaderProgress.textContent = `LOADING ${percentage}%`;
@@ -285,12 +287,16 @@ const runPageLoader = () => {
       return;
     }
 
-    pageLoader.classList.add("is-loaded");
-    document.body.classList.remove("is-loading");
+    pageLoader.classList.add("is-complete");
 
     window.setTimeout(() => {
-      pageLoader.remove();
-    }, 560);
+      pageLoader.classList.add("is-loaded");
+      document.body.classList.remove("is-loading");
+
+      window.setTimeout(() => {
+        pageLoader.remove();
+      }, 560);
+    }, prefersReducedMotion ? 220 : 1000);
   };
 
   window.requestAnimationFrame(tick);
@@ -539,6 +545,45 @@ if (menuToggle && navLinks) {
     }
   });
 }
+
+const workToggles = Array.from(document.querySelectorAll("[data-work-toggle]"));
+const workCards = Array.from(document.querySelectorAll(".works-project-card"));
+
+workToggles.forEach((toggle) => {
+  toggle.addEventListener("click", () => {
+    const card = toggle.closest(".works-project-card");
+    if (!card) {
+      return;
+    }
+
+    const isOpening = !card.classList.contains("is-expanded");
+    workToggles.forEach((otherToggle) => {
+      const otherCard = otherToggle.closest(".works-project-card");
+      if (!otherCard || otherCard === card) {
+        return;
+      }
+
+      otherCard.classList.remove("is-expanded");
+      otherToggle.setAttribute("aria-expanded", "false");
+    });
+
+    card.classList.toggle("is-expanded", isOpening);
+    toggle.setAttribute("aria-expanded", String(isOpening));
+  });
+});
+
+workCards.forEach((card) => {
+  card.addEventListener("click", (event) => {
+    if (event.target.closest("a, button")) {
+      return;
+    }
+
+    const toggle = card.querySelector("[data-work-toggle]");
+    if (toggle) {
+      toggle.click();
+    }
+  });
+});
 
 const ctaHoverColors = [
   { background: "#fc3d9d", color: "#fff", iconFilter: "invert(1)" },
